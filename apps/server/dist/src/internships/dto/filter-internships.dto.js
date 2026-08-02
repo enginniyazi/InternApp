@@ -13,10 +13,15 @@ exports.FilterInternshipsDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
+const client_1 = require("@prisma/client");
 class FilterInternshipsDto {
     search;
     location;
+    city;
     isRemote;
+    internshipType;
+    targetEducationLevel;
+    workModel;
 }
 exports.FilterInternshipsDto = FilterInternshipsDto;
 __decorate([
@@ -32,6 +37,12 @@ __decorate([
     __metadata("design:type", String)
 ], FilterInternshipsDto.prototype, "location", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Şehir' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], FilterInternshipsDto.prototype, "city", void 0);
+__decorate([
     (0, swagger_1.ApiPropertyOptional)({ description: 'Remote çalışma filtresi' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Transform)(({ value }) => {
@@ -44,4 +55,22 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], FilterInternshipsDto.prototype, "isRemote", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: client_1.InternshipType, description: 'Staj Tipi' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.InternshipType),
+    __metadata("design:type", String)
+], FilterInternshipsDto.prototype, "internshipType", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: client_1.EducationLevel, description: 'Eğitim Seviyesi' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.EducationLevel),
+    __metadata("design:type", String)
+], FilterInternshipsDto.prototype, "targetEducationLevel", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: client_1.WorkModel, description: 'Çalışma Modeli' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.WorkModel),
+    __metadata("design:type", String)
+], FilterInternshipsDto.prototype, "workModel", void 0);
 //# sourceMappingURL=filter-internships.dto.js.map

@@ -41,6 +41,29 @@ export class InternshipsService {
         location: dto.location,
         isRemote: dto.isRemote ?? false,
         requirements: dto.requirements ?? [],
+        internshipType: dto.internshipType,
+        targetEducationLevel: dto.targetEducationLevel,
+        targetDepartments: dto.targetDepartments ?? [],
+        targetGrades: dto.targetGrades ?? [],
+        weeklyDays: dto.weeklyDays ?? 5,
+        durationWeeks: dto.durationWeeks ?? 12,
+        workModel: dto.workModel,
+        city: dto.city ?? 'İstanbul',
+        district: dto.district,
+        stipendType: dto.stipendType,
+        hasMealAllowance: dto.hasMealAllowance ?? true,
+        hasTransportation: dto.hasTransportation ?? true,
+        hasEquipment: dto.hasEquipment ?? true,
+        returnOfferProbability: dto.returnOfferProbability,
+        requiredSkills: dto.requiredSkills ?? [],
+        languageRequirements: dto.languageRequirements,
+        applicationDeadline: dto.applicationDeadline
+          ? new Date(dto.applicationDeadline)
+          : null,
+        expectedStartDate: dto.expectedStartDate
+          ? new Date(dto.expectedStartDate)
+          : null,
+        quota: dto.quota ?? 1,
       },
       include: {
         company: true,
@@ -49,7 +72,15 @@ export class InternshipsService {
   }
 
   async findAll(filterDto: FilterInternshipsDto) {
-    const { search, location, isRemote } = filterDto;
+    const {
+      search,
+      location,
+      city,
+      isRemote,
+      internshipType,
+      targetEducationLevel,
+      workModel,
+    } = filterDto;
 
     const where: Prisma.InternshipWhereInput = {};
 
@@ -57,6 +88,7 @@ export class InternshipsService {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
+        { requiredSkills: { hasSome: [search] } },
       ];
     }
 
@@ -64,8 +96,24 @@ export class InternshipsService {
       where.location = { contains: location, mode: 'insensitive' };
     }
 
+    if (city) {
+      where.city = { equals: city, mode: 'insensitive' };
+    }
+
     if (typeof isRemote === 'boolean') {
       where.isRemote = isRemote;
+    }
+
+    if (internshipType) {
+      where.internshipType = internshipType;
+    }
+
+    if (targetEducationLevel) {
+      where.targetEducationLevel = targetEducationLevel;
+    }
+
+    if (workModel) {
+      where.workModel = workModel;
     }
 
     return this.prisma.internship.findMany({
@@ -145,6 +193,29 @@ export class InternshipsService {
         location: dto.location,
         isRemote: dto.isRemote,
         requirements: dto.requirements,
+        internshipType: dto.internshipType,
+        targetEducationLevel: dto.targetEducationLevel,
+        targetDepartments: dto.targetDepartments,
+        targetGrades: dto.targetGrades,
+        weeklyDays: dto.weeklyDays,
+        durationWeeks: dto.durationWeeks,
+        workModel: dto.workModel,
+        city: dto.city,
+        district: dto.district,
+        stipendType: dto.stipendType,
+        hasMealAllowance: dto.hasMealAllowance,
+        hasTransportation: dto.hasTransportation,
+        hasEquipment: dto.hasEquipment,
+        returnOfferProbability: dto.returnOfferProbability,
+        requiredSkills: dto.requiredSkills,
+        languageRequirements: dto.languageRequirements,
+        applicationDeadline: dto.applicationDeadline
+          ? new Date(dto.applicationDeadline)
+          : undefined,
+        expectedStartDate: dto.expectedStartDate
+          ? new Date(dto.expectedStartDate)
+          : undefined,
+        quota: dto.quota,
       },
       include: {
         company: true,

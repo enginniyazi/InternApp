@@ -70,17 +70,78 @@ model CompanyProfile {
   @@map("company_profiles")
 }
 
+enum InternshipType {
+  MANDATORY
+  VOLUNTARY
+  LONG_TERM
+  SUMMER
+}
+
+enum EducationLevel {
+  HIGH_SCHOOL
+  ASSOCIATE
+  BACHELOR
+  MASTER_PHD
+  ALL
+}
+
+enum WorkModel {
+  REMOTE
+  HYBRID
+  ON_SITE
+}
+
+enum StipendType {
+  UNPAID
+  MINIMUM_WAGE
+  ABOVE_MINIMUM
+  SCHOLARSHIP
+}
+
+enum ReturnOfferProbability {
+  HIGH
+  MEDIUM
+  LOW
+  NONE
+}
+
 model Internship {
-  id          String   @id @default(uuid())
-  companyId   String
-  company     CompanyProfile @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  title       String
-  description String
-  location    String
-  isRemote    Boolean  @default(false)
-  requirements String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   String                 @id @default(uuid())
+  companyId            String
+  company              CompanyProfile         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title                String
+  description          String
+  location             String
+  isRemote             Boolean                @default(false)
+  requirements         String[]
+  
+  // Gelişmiş İlan Özellikleri
+  internshipType       InternshipType         @default(MANDATORY)
+  targetEducationLevel EducationLevel         @default(BACHELOR)
+  targetDepartments    String[]               @default([])
+  targetGrades         Int[]                  @default([])
+  
+  weeklyDays           Int                    @default(5)
+  durationWeeks        Int                    @default(12)
+  workModel            WorkModel              @default(HYBRID)
+  city                 String                 @default("İstanbul")
+  district             String?
+  
+  stipendType          StipendType            @default(MINIMUM_WAGE)
+  hasMealAllowance     Boolean                @default(true)
+  hasTransportation    Boolean                @default(true)
+  hasEquipment         Boolean                @default(true)
+  returnOfferProbability ReturnOfferProbability @default(MEDIUM)
+  
+  requiredSkills       String[]               @default([])
+  languageRequirements String?
+  
+  applicationDeadline  DateTime?
+  expectedStartDate    DateTime?
+  quota                Int                    @default(1)
+
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
 
   applications Application[]
 
