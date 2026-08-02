@@ -35,6 +35,8 @@ export class StorageService {
 
     await fs.promises.writeFile(filePath, file.buffer);
 
-    return `/uploads/cvs/${fileName}`;
+    const baseUrl =
+      process.env.BACKEND_URL || 'https://stajapp-server.onrender.com';
+    return `${baseUrl.replace(/\/$/, '')}/uploads/cvs/${fileName}`;
   }
 }

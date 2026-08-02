@@ -69,7 +69,8 @@ let StorageService = class StorageService {
         const fileName = `${crypto.randomUUID()}${fileExtension}`;
         const filePath = path.join(this.uploadDir, fileName);
         await fs.promises.writeFile(filePath, file.buffer);
-        return `/uploads/cvs/${fileName}`;
+        const baseUrl = process.env.BACKEND_URL || 'https://stajapp-server.onrender.com';
+        return `${baseUrl.replace(/\/$/, '')}/uploads/cvs/${fileName}`;
     }
 };
 exports.StorageService = StorageService;

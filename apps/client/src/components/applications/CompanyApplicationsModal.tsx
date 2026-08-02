@@ -32,6 +32,16 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
 
   if (!isOpen) return null;
 
+  const getFullCvUrl = (cvUrl?: string) => {
+    if (!cvUrl) return '';
+    if (cvUrl.startsWith('http://') || cvUrl.startsWith('https://')) {
+      return cvUrl;
+    }
+    const backendBase = import.meta.env.VITE_API_URL || 'https://stajapp-server.onrender.com';
+    const cleanCvPath = cvUrl.startsWith('/') ? cvUrl : `/${cvUrl}`;
+    return `${backendBase.replace(/\/$/, '')}${cleanCvPath}`;
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-card" style={{ maxWidth: '720px', width: '92%' }}>
@@ -79,7 +89,7 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {app.cvUrl ? (
                         <a
-                          href={app.cvUrl}
+                          href={getFullCvUrl(app.cvUrl)}
                           target="_blank"
                           rel="noreferrer"
                           className="btn-secondary"
