@@ -1,0 +1,62 @@
+/* apps/client/src/index.css */
+
+html[data-theme='dark'],
+:root[data-theme='dark'] {
+  --bg-primary: #0b0f19;
+  --bg-card: #151c2e;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --accent-color: #6366f1;
+  --input-bg: #1e293b;
+  --input-text: #ffffff;
+  --header-bg: #0f172a;
+}
+
+html[data-theme='light'],
+:root[data-theme='light'] {
+  --bg-primary: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-color: #cbd5e1;
+  --accent-color: #4f46e5;
+  --input-bg: #ffffff;
+  --input-text: #0f172a;
+  --header-bg: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accessible Focus Ring */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 2px;
+}

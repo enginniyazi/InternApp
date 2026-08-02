@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stajapp.com/sitemap.xml

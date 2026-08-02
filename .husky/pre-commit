@@ -1,0 +1,25 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run linting and formatting checks before allowing a commit
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Commit aborted."
+  exit 1
+fi
+
+npm run format:check
+if [ $? -ne 0 ]; then
+  echo "Code formatting check failed. Run 'npm run format' to fix. Commit aborted."
+  exit 1
+fi
+
+# Run reuse checks
+npm run check:reuse
+if [ $? -ne 0 ]; then
+  echo "Reusability checks failed. Commit aborted."
+  exit 1
+fi
+
+# Optional: run tests (if you have them)
+# npm test

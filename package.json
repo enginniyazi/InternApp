@@ -1,0 +1,31 @@
+{
+  "name": "internapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.tsx,.js,.jsx",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky install",
+    "check:reuse": "tsx scripts/check-reusability.ts",
+    "test": "echo \"No tests defined yet\" && exit 0",
+    "build": "echo \"Build placeholder – add Vite/Nest build commands here\" && exit 0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "husky": "^9.0.0",
+    "prettier": "^3.3.0",
+    "ts-morph": "^22.0.0",
+    "ts-node": "^10.9.0",
+    "tsx": "^4.23.1",
+    "typescript": "^5.5.0"
+  }
+}

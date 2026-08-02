@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm --prefix apps/client run build",
+  "outputDirectory": "apps/client/dist",
+  "framework": "vite"
+}

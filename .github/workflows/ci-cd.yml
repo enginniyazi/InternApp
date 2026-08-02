@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    name: Lint, Test & Reusability Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Install Server Dependencies
+        run: npm --prefix apps/server ci
+
+      - name: Install Client Dependencies
+        run: npm --prefix apps/client ci
+
+      - name: Generate Prisma Client
+        run: npm --prefix apps/server run prisma generate
+
+      - name: Run Lint Checks
+        run: npm run lint
+
+      - name: Run Format Checks
+        run: npm run format:check
+
+      - name: Run Component Reusability Checks
+        run: npm run check:reuse
+
+      - name: Run Server Unit Tests
+        run: npm --prefix apps/server run test
+
+      - name: Build Server
+        run: npm --prefix apps/server run build
+
+      - name: Build Client
+        run: npm --prefix apps/client run build

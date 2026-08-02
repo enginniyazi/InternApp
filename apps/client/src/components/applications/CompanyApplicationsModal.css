@@ -1,0 +1,36 @@
+/* apps/client/src/components/applications/CompanyApplicationsModal.css */
+
+.applicant-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-main);
+}
+
+.applicant-name {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 15px;
+}
+
+.applicant-email {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.status-select {
+  padding: 6px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--input-text);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
