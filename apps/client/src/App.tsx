@@ -62,6 +62,16 @@ function App() {
     firstName: '',
     lastName: '',
     phone: '',
+    city: '',
+    university: '',
+    department: '',
+    grade: '3. Sınıf',
+    gpa: '',
+    educationLevel: 'BACHELOR',
+    internshipStatus: 'MANDATORY',
+    skills: [],
+    linkedinUrl: '',
+    githubUrl: '',
     bio: '',
   });
 
