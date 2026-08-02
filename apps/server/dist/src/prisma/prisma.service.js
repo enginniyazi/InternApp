@@ -55,11 +55,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
     }
     async ensureSeedData() {
         try {
-            const userCount = await this.user.count();
-            if (userCount > 0) {
-                return;
-            }
-            this.logger.log('🌱 Canlı veritabanı boş tespit edildi, otomatik seed başlatılıyor...');
+            this.logger.log('🌱 Canlı veritabanı seed kontrolü yapılıyor...');
             const passwordHash = await bcrypt.hash('123456', 10);
             await this.user.upsert({
                 where: { email: 'admin@stajapp.com' },
