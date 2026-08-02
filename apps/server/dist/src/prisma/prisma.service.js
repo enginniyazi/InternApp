@@ -350,7 +350,9 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                     ...baseTemplates.map((t, idx) => ({
                         ...t,
                         title: `${t.title} (${idx % 2 === 0 ? 'Güz Dönemi' : 'Bahar Dönemi'})`,
-                        internshipType: (idx % 2 === 0 ? 'LONG_TERM' : 'VOLUNTARY'),
+                        internshipType: (idx % 2 === 0
+                            ? 'LONG_TERM'
+                            : 'VOLUNTARY'),
                         targetEducationLevel: (idx % 3 === 0
                             ? 'ASSOCIATE'
                             : idx % 3 === 1

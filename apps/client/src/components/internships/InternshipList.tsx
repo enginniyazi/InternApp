@@ -8,6 +8,7 @@ interface InternshipListProps {
   isCompany?: boolean;
   studentProfile?: {
     educationLevel?: string;
+    department?: string;
     internshipStatus?: string;
     skills?: string[];
   };
@@ -36,7 +37,68 @@ export const InternshipList: React.FC<InternshipListProps> = ({
   const [selectedEdu, setSelectedEdu] = useState('ALL');
   const [isSmartMatchActive, setIsSmartMatchActive] = useState(false);
 
-  const filteredInternships = internships.filter((item) => {
+  // ─── AKILLI EŞLEŞME FİLTRELEME & PUANLAMA ALGORİTMASI ───
+  let processList = internships;
+
+  if (isSmartMatchActive && studentProfile) {
+    const studentEdu = studentProfile.educationLevel || 'BACHELOR';
+    const studentDept = (studentProfile.department || '').toLowerCase();
+    const studentStatus = studentProfile.internshipStatus;
+    const studentSkills = (studentProfile.skills || []).map((s) => s.toLowerCase());
+
+    processList = processList
+      .filter((item) => {
+        // 1. KATI EĞİTİM SEVİYESİ ENGELİ: İlanın hedef eğitimi öğrencininkinden farklıysa KESİNLİKLE gösterilmez.
+        if (item.targetEducationLevel && item.targetEducationLevel !== studentEdu) {
+          return false;
+        }
+        return true;
+      })
+      .map((item) => {
+        let score = 0;
+
+        // a) Eğitim Seviyesi Tam Eşleşmesi
+        if (item.targetEducationLevel === studentEdu) {
+          score += 40;
+        }
+
+        // b) Staj Tipi (Zorunlu/Gönüllü) Eşleşmesi
+        if (studentStatus && item.internshipType === studentStatus) {
+          score += 25;
+        }
+
+        // c) Bölüm Eşleşmesi
+        if (
+          studentDept &&
+          item.targetDepartments &&
+          item.targetDepartments.some(
+            (d) => d.toLowerCase().includes(studentDept) || studentDept.includes(d.toLowerCase())
+          )
+        ) {
+          score += 25;
+        }
+
+        // d) Teknik Yetenek (Skills) Eşleşmesi
+        if (studentSkills.length > 0 && item.requiredSkills) {
+          item.requiredSkills.forEach((skill) => {
+            if (
+              studentSkills.some(
+                (sSkill) =>
+                  sSkill.includes(skill.toLowerCase()) || skill.toLowerCase().includes(sSkill)
+              )
+            ) {
+              score += 15;
+            }
+          });
+        }
+
+        return { item, score };
+      })
+      .sort((a, b) => b.score - a.score)
+      .map((entry) => entry.item);
+  }
+
+  const filteredInternships = processList.filter((item) => {
     const term = searchTerm.toLowerCase();
     const matchesSearch =
       item.title.toLowerCase().includes(term) ||
@@ -47,14 +109,6 @@ export const InternshipList: React.FC<InternshipListProps> = ({
     const matchesRemote = onlyRemote ? item.isRemote === true : true;
     const matchesType = selectedType === 'ALL' ? true : item.internshipType === selectedType;
     const matchesEdu = selectedEdu === 'ALL' ? true : item.targetEducationLevel === selectedEdu;
-
-    // Akıllı Eşleşme Aktifse: Öğrencinin eğitim seviyesine uymayan (örneğin Lise) ilanları KESİNLİKLE eliyoruz.
-    if (isSmartMatchActive && studentProfile?.educationLevel) {
-      const studentEdu = studentProfile.educationLevel;
-      if (item.targetEducationLevel && item.targetEducationLevel !== studentEdu) {
-        return false;
-      }
-    }
 
     return matchesSearch && matchesRemote && matchesType && matchesEdu;
   });
