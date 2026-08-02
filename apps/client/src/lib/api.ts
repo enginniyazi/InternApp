@@ -75,7 +75,6 @@ async function request<T>(endpoint: string, options: RequestInit = {}, retry = t
     }
     // Refresh de başarısız → logout
     clearTokens();
-    window.location.reload();
     throw new ApiError(401, 'Oturum süresi doldu. Lütfen tekrar giriş yapın.');
   }
 

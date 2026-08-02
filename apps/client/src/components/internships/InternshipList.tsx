@@ -26,16 +26,22 @@ export const InternshipList: React.FC<InternshipListProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [onlyRemote, setOnlyRemote] = useState(false);
+  const [selectedType, setSelectedType] = useState('ALL');
+  const [selectedEdu, setSelectedEdu] = useState('ALL');
 
   const filteredInternships = internships.filter((item) => {
+    const term = searchTerm.toLowerCase();
     const matchesSearch =
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchTerm.toLowerCase());
+      item.title.toLowerCase().includes(term) ||
+      item.description.toLowerCase().includes(term) ||
+      item.location.toLowerCase().includes(term) ||
+      (item.requiredSkills && item.requiredSkills.some((s) => s.toLowerCase().includes(term)));
 
     const matchesRemote = onlyRemote ? item.isRemote === true : true;
+    const matchesType = selectedType === 'ALL' ? true : item.internshipType === selectedType;
+    const matchesEdu = selectedEdu === 'ALL' ? true : item.targetEducationLevel === selectedEdu;
 
-    return matchesSearch && matchesRemote;
+    return matchesSearch && matchesRemote && matchesType && matchesEdu;
   });
 
   return (
@@ -55,13 +61,38 @@ export const InternshipList: React.FC<InternshipListProps> = ({
         <input
           type="text"
           className="search-input"
-          placeholder="Pozisyon, açıklama veya şehir ara..."
+          placeholder="Pozisyon, yetenek, açıklama veya şehir ara..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
             onSearchChange?.(e.target.value);
           }}
         />
+
+        <select
+          className="filter-select"
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value="ALL">Tüm Staj Tipleri</option>
+          <option value="MANDATORY">Zorunlu Staj</option>
+          <option value="VOLUNTARY">Gönüllü Staj</option>
+          <option value="LONG_TERM">Uzun Dönem</option>
+          <option value="SUMMER">Yaz Stajı</option>
+        </select>
+
+        <select
+          className="filter-select"
+          value={selectedEdu}
+          onChange={(e) => setSelectedEdu(e.target.value)}
+        >
+          <option value="ALL">Tüm Eğitim Seviyeleri</option>
+          <option value="BACHELOR">Lisans</option>
+          <option value="ASSOCIATE">Önlisans (MYO)</option>
+          <option value="HIGH_SCHOOL">Lise / Meslek</option>
+          <option value="MASTER_PHD">Yüksek Lisans / Doktora</option>
+        </select>
+
         <label className="remote-toggle">
           <input
             type="checkbox"
@@ -71,7 +102,7 @@ export const InternshipList: React.FC<InternshipListProps> = ({
               onRemoteToggle?.(e.target.checked);
             }}
           />
-          Sadece Uzaktan (Remote)
+          Remote
         </label>
       </div>
 
