@@ -104,6 +104,23 @@ export const InternshipList: React.FC<InternshipListProps> = ({
           />
           Remote
         </label>
+
+        {!isCompany && (
+          <button
+            type="button"
+            className={`smart-match-btn ${selectedEdu === 'BACHELOR' ? 'active' : ''}`}
+            onClick={() => {
+              if (selectedEdu === 'BACHELOR') {
+                setSelectedEdu('ALL');
+              } else {
+                setSelectedEdu('BACHELOR');
+              }
+            }}
+            title="Profil eğitim seviyenize en uygun ilanları süzün"
+          >
+            ✨ Bana Uygun İlanlar
+          </button>
+        )}
       </div>
 
       {filteredInternships.length > 0 ? (
