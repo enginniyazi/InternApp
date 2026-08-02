@@ -38,16 +38,26 @@ model User {
 }
 
 model StudentProfile {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  firstName String
-  lastName  String
-  phone     String?
-  cvUrl     String?
-  bio       String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String          @id @default(uuid())
+  userId           String          @unique
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName        String
+  lastName         String
+  phone            String?
+  city             String?
+  university       String?
+  department       String?
+  grade            String?
+  gpa              Float?
+  educationLevel   EducationLevel?
+  internshipStatus InternshipType?
+  skills           String[]        @default([])
+  linkedinUrl      String?
+  githubUrl        String?
+  cvUrl            String?
+  bio              String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   applications Application[]
 

@@ -12,10 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateStudentProfileDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 class UpdateStudentProfileDto {
     firstName;
     lastName;
     phone;
+    city;
+    university;
+    department;
+    grade;
+    gpa;
+    educationLevel;
+    internshipStatus;
+    skills;
+    linkedinUrl;
+    githubUrl;
     bio;
     cvUrl;
 }
@@ -41,6 +52,82 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateStudentProfileDto.prototype, "phone", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Şehir', example: 'İstanbul' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "city", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Üniversite', example: 'İTÜ' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "university", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Bölüm',
+        example: 'Bilgisayar Mühendisliği',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "department", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Sınıf', example: '3. Sınıf' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "grade", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: 'GANO / Not Ortalaması', example: 3.45 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateStudentProfileDto.prototype, "gpa", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: client_1.EducationLevel, description: 'Eğitim Seviyesi' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.EducationLevel),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "educationLevel", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: client_1.InternshipType,
+        description: 'Aranan Staj Tipi',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.InternshipType),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "internshipStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Yetenekler',
+        example: ['React', 'Python'],
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], UpdateStudentProfileDto.prototype, "skills", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'LinkedIn URL',
+        example: 'https://linkedin.com/in/ahmet',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "linkedinUrl", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'GitHub URL',
+        example: 'https://github.com/ahmet',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "githubUrl", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         description: 'Biyografi / Hakkında',

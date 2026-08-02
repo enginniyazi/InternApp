@@ -22,6 +22,16 @@ export declare class JwtStrategy extends JwtStrategy_base {
             firstName: string;
             lastName: string;
             phone: string | null;
+            city: string | null;
+            university: string | null;
+            department: string | null;
+            grade: string | null;
+            gpa: number | null;
+            educationLevel: import(".prisma/client").$Enums.EducationLevel | null;
+            internshipStatus: import(".prisma/client").$Enums.InternshipType | null;
+            skills: string[];
+            linkedinUrl: string | null;
+            githubUrl: string | null;
             cvUrl: string | null;
             bio: string | null;
             createdAt: Date;

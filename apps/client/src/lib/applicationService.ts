@@ -25,6 +25,14 @@ interface CompanyApplicationApiItem {
     firstName: string;
     lastName: string;
     phone?: string;
+    city?: string;
+    university?: string;
+    department?: string;
+    grade?: string;
+    gpa?: number;
+    skills?: string[];
+    linkedinUrl?: string;
+    githubUrl?: string;
     cvUrl?: string;
     bio?: string;
     user: {
@@ -60,6 +68,13 @@ export async function fetchCompanyApplications(internshipId?: string): Promise<A
     studentName: `${item.student.firstName} ${item.student.lastName}`,
     studentEmail: item.student.user.email,
     studentPhone: item.student.phone,
+    university: item.student.university,
+    department: item.student.department,
+    grade: item.student.grade,
+    gpa: item.student.gpa,
+    skills: item.student.skills,
+    linkedinUrl: item.student.linkedinUrl,
+    githubUrl: item.student.githubUrl,
     cvUrl: item.student.cvUrl,
     bio: item.student.bio,
     note: item.note,

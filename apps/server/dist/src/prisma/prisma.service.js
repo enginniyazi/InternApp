@@ -276,10 +276,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         isRemote: false,
                         internshipType: 'MANDATORY',
                         targetEducationLevel: 'HIGH_SCHOOL',
-                        targetDepartments: [
-                            'Bilişim Teknolojileri',
-                            'Elektrik-Elektronik',
-                        ],
+                        targetDepartments: ['Bilişim Teknolojileri', 'Elektrik-Elektronik'],
                         weeklyDays: 3,
                         durationWeeks: 30,
                         workModel: 'ON_SITE',

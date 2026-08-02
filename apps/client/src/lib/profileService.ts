@@ -10,6 +10,16 @@ interface StudentProfileApiResponse {
   firstName: string;
   lastName: string;
   phone?: string;
+  city?: string;
+  university?: string;
+  department?: string;
+  grade?: string;
+  gpa?: number;
+  educationLevel?: string;
+  internshipStatus?: string;
+  skills?: string[];
+  linkedinUrl?: string;
+  githubUrl?: string;
   bio?: string;
   cvUrl?: string;
 }
@@ -20,6 +30,16 @@ export async function fetchStudentProfile(): Promise<StudentProfileData> {
     firstName: data.firstName,
     lastName: data.lastName,
     phone: data.phone || '',
+    city: data.city || '',
+    university: data.university || '',
+    department: data.department || '',
+    grade: data.grade || '',
+    gpa: data.gpa ? String(data.gpa) : '',
+    educationLevel: data.educationLevel || 'BACHELOR',
+    internshipStatus: data.internshipStatus || 'MANDATORY',
+    skills: data.skills || [],
+    linkedinUrl: data.linkedinUrl || '',
+    githubUrl: data.githubUrl || '',
     bio: data.bio || '',
     cvUrl: data.cvUrl,
   };
@@ -28,11 +48,25 @@ export async function fetchStudentProfile(): Promise<StudentProfileData> {
 export async function updateStudentProfile(
   profile: Partial<StudentProfileData>
 ): Promise<StudentProfileData> {
-  const data = await api.patch<StudentProfileApiResponse>('/profiles/student', profile);
+  const payload = {
+    ...profile,
+    gpa: profile.gpa ? parseFloat(profile.gpa) : undefined,
+  };
+  const data = await api.patch<StudentProfileApiResponse>('/profiles/student', payload);
   return {
     firstName: data.firstName,
     lastName: data.lastName,
     phone: data.phone || '',
+    city: data.city || '',
+    university: data.university || '',
+    department: data.department || '',
+    grade: data.grade || '',
+    gpa: data.gpa ? String(data.gpa) : '',
+    educationLevel: data.educationLevel || 'BACHELOR',
+    internshipStatus: data.internshipStatus || 'MANDATORY',
+    skills: data.skills || [],
+    linkedinUrl: data.linkedinUrl || '',
+    githubUrl: data.githubUrl || '',
     bio: data.bio || '',
     cvUrl: data.cvUrl,
   };

@@ -6,6 +6,13 @@ export interface ApplicantItem {
   studentName: string;
   studentEmail: string;
   studentPhone?: string;
+  university?: string;
+  department?: string;
+  grade?: string;
+  gpa?: number;
+  skills?: string[];
+  linkedinUrl?: string;
+  githubUrl?: string;
   cvUrl?: string;
   bio?: string;
   note?: string;
@@ -44,7 +51,7 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card" style={{ maxWidth: '720px', width: '92%' }}>
+      <div className="modal-card" style={{ maxWidth: '750px', width: '92%' }}>
         <div className="modal-header">
           <h3 className="modal-title">
             Gelen Başvurular: <span style={{ color: '#818cf8' }}>{internshipTitle}</span>
@@ -81,9 +88,18 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
                   >
                     <div>
                       <div className="applicant-name">{app.studentName}</div>
-                      <div className="applicant-email">
+                      <div
+                        className="applicant-email"
+                        style={{ fontSize: '13px', color: '#94a3b8' }}
+                      >
                         ✉️ {app.studentEmail} {app.studentPhone && `• 📞 ${app.studentPhone}`}
                       </div>
+                      {(app.university || app.department) && (
+                        <div style={{ fontSize: '12px', color: '#818cf8', marginTop: '2px' }}>
+                          🎓 {app.university || 'Üniversite'} - {app.department || 'Bölüm'} (
+                          {app.grade || 'Öğrenci'}) {app.gpa ? `• GANO: ${app.gpa}` : ''}
+                        </div>
+                      )}
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -116,7 +132,7 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
                             borderRadius: '6px',
                           }}
                         >
-                          CV Yüklenmemiş
+                          CV Yok
                         </span>
                       )}
 
@@ -150,41 +166,89 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
                     </div>
                   </div>
 
-                  {/* Aday Biyografisi & Ön Yazısı (Açılır Detay) */}
+                  {/* Aday Detayları Paneli */}
                   {isExpanded && (
                     <div
                       style={{
                         background: 'rgba(0, 0, 0, 0.25)',
-                        padding: '12px 16px',
-                        borderRadius: '8px',
+                        padding: '14px 16px',
+                        borderRadius: '10px',
                         border: '1px solid rgba(255, 255, 255, 0.08)',
                         fontSize: '13px',
                         color: '#cbd5e1',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '8px',
+                        gap: '10px',
                       }}
                     >
+                      {app.skills && app.skills.length > 0 && (
+                        <div>
+                          <strong style={{ color: '#e2e8f0' }}>🛠️ Bildiği Yetenekler:</strong>
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: '6px',
+                              marginTop: '4px',
+                            }}
+                          >
+                            {app.skills.map((skill, sIdx) => (
+                              <span
+                                key={sIdx}
+                                style={{
+                                  background: 'rgba(99, 102, 241, 0.15)',
+                                  color: '#818cf8',
+                                  padding: '2px 8px',
+                                  borderRadius: '6px',
+                                  fontSize: '12px',
+                                }}
+                              >
+                                #{skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {(app.linkedinUrl || app.githubUrl) && (
+                        <div style={{ display: 'flex', gap: '16px' }}>
+                          {app.linkedinUrl && (
+                            <a
+                              href={app.linkedinUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '12px' }}
+                            >
+                              🔗 LinkedIn Profili ↗
+                            </a>
+                          )}
+                          {app.githubUrl && (
+                            <a
+                              href={app.githubUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ color: '#c084fc', textDecoration: 'none', fontSize: '12px' }}
+                            >
+                              💻 GitHub / Portfolyo ↗
+                            </a>
+                          )}
+                        </div>
+                      )}
+
                       {app.bio && (
                         <div>
-                          <strong style={{ color: '#e2e8f0' }}>👤 Aday Biyografisi:</strong>
+                          <strong style={{ color: '#e2e8f0' }}>👤 Biyografi:</strong>
                           <p style={{ margin: '4px 0 0 0', color: '#94a3b8' }}>{app.bio}</p>
                         </div>
                       )}
 
                       {app.note && (
                         <div>
-                          <strong style={{ color: '#818cf8' }}>💬 Başvuru Ön Yazısı / Notu:</strong>
+                          <strong style={{ color: '#818cf8' }}>💬 Başvuru Ön Yazısı:</strong>
                           <p style={{ margin: '4px 0 0 0', color: '#f8fafc', fontStyle: 'italic' }}>
                             "{app.note}"
                           </p>
                         </div>
-                      )}
-
-                      {!app.bio && !app.note && (
-                        <span style={{ color: '#64748b' }}>
-                          Ek biyografi veya ön yazı bulunmuyor.
-                        </span>
                       )}
                     </div>
                   )}
