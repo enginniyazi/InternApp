@@ -48,10 +48,44 @@ export const InternshipList: React.FC<InternshipListProps> = ({
 
     processList = processList
       .filter((item) => {
-        // 1. KATI EĞİTİM SEVİYESİ ENGELİ: İlanın hedef eğitimi öğrencininkinden farklıysa KESİNLİKLE gösterilmez.
-        if (item.targetEducationLevel && item.targetEducationLevel !== studentEdu) {
+        const itemTitle = item.title.toLowerCase();
+
+        // Öğrenci Lisans / Yüksek Lisans ise: Başlığında "meslek lisesi" veya "lise" geçen ilanları KESİNLİKLE ele.
+        if (studentEdu === 'BACHELOR' || studentEdu === 'MASTER_PHD') {
+          if (
+            itemTitle.includes('meslek lisesi') ||
+            itemTitle.includes('lise stajyeri') ||
+            itemTitle.includes('lise stajı')
+          ) {
+            return false;
+          }
+          if (
+            item.targetEducationLevel === 'HIGH_SCHOOL' ||
+            item.targetEducationLevel === 'ASSOCIATE'
+          ) {
+            return false;
+          }
+        }
+
+        // Öğrenci Lise ise: Lisans/Yüksek Lisans ilanlarını ele.
+        if (studentEdu === 'HIGH_SCHOOL') {
+          if (
+            item.targetEducationLevel === 'BACHELOR' ||
+            item.targetEducationLevel === 'MASTER_PHD'
+          ) {
+            return false;
+          }
+        }
+
+        // Eğer ilan belirli bir eğitim seviyesini hedefliyorsa ve öğrencininkiyle uyuşmuyorsa ele.
+        if (
+          item.targetEducationLevel &&
+          item.targetEducationLevel !== 'ALL' &&
+          item.targetEducationLevel !== studentEdu
+        ) {
           return false;
         }
+
         return true;
       })
       .map((item) => {
