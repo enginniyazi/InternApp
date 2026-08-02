@@ -5,19 +5,14 @@
 import { api } from './api';
 import type { ApplicationItem } from '../components/applications/StudentApplicationsList';
 import type { ApplicantItem } from '../components/applications/CompanyApplicationsModal';
+import type { InternshipData } from '../components/internships/InternshipCard';
 
 interface StudentApplicationApiItem {
   id: string;
   status: ApplicationItem['status'];
   note?: string;
   createdAt: string;
-  internship: {
-    id: string;
-    title: string;
-    company: {
-      companyName: string;
-    };
-  };
+  internship: InternshipData;
 }
 
 interface CompanyApplicationApiItem {
@@ -45,10 +40,11 @@ export async function fetchStudentApplications(): Promise<ApplicationItem[]> {
   return items.map((item) => ({
     id: item.id,
     internshipTitle: item.internship.title,
-    companyName: item.internship.company.companyName,
+    companyName: item.internship.company?.companyName || 'Şirket',
     status: item.status,
     createdAt: item.createdAt,
     note: item.note,
+    internship: item.internship,
   }));
 }
 
