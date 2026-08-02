@@ -58,7 +58,7 @@ export class PrismaService
       });
 
       // 3. Şirket
-      await this.user.upsert({
+      const companyUser = await this.user.upsert({
         where: { email: 'hr@techvision.com' },
         update: {},
         create: {
@@ -74,7 +74,243 @@ export class PrismaService
             },
           },
         },
+        include: { companyProfile: true },
       });
+
+      if (companyUser.companyProfile) {
+        const companyId = companyUser.companyProfile.id;
+        const internshipCount = await this.internship.count({
+          where: { companyId },
+        });
+
+        if (internshipCount === 0) {
+          const sampleInternships = [
+            {
+              title: 'Frontend Developer Stajyeri (React & TypeScript)',
+              description:
+                'Modern web teknolojileri ile kullanıcı dostu arayüzler geliştirecek, React, TypeScript ve TailwindCSS deneyimi kazanmak isteyen tutkulu stajyerler arıyoruz.',
+              location: 'İstanbul / Maslak',
+              isRemote: true,
+            },
+            {
+              title: 'Backend Developer Stajyeri (NestJS & Node.js)',
+              description:
+                'Ölçeklenebilir RESTful API servisleri geliştirecek, PostgreSQL ve Prisma ORM mimarilerini yerinde deneyimleyecek stajyer takım arkadaşı arıyoruz.',
+              location: 'Ankara / ODTÜ Teknokent',
+              isRemote: false,
+            },
+            {
+              title: 'Yapay Zeka ve Veri Bilimi Stajyeri',
+              description:
+                'Python, PyTorch ve Scikit-Learn kullanarak makine öğrenmesi modelleri eğitecek, veri temizleme ve analiz süreçlerinde rol alacak vizyoner stajyer.',
+              location: 'İzmir / Urla Teknopark',
+              isRemote: true,
+            },
+            {
+              title: 'iOS Mobil Uygulama Geliştirme Stajyeri',
+              description:
+                'Swift ve SwiftUI kullanarak modern iOS uygulamaları geliştirecek, Apple tasarım prensiplerine hakim genç yetenekler arıyoruz.',
+              location: 'İstanbul / Levent',
+              isRemote: false,
+            },
+            {
+              title: 'Android Mobil Uygulama Geliştirme Stajyeri',
+              description:
+                'Kotlin ve Jetpack Compose teknolojileri ile yüksek performanslı Android uygulamaları tasarlayacak stajyer aranıyor.',
+              location: 'İstanbul / Kadıköy',
+              isRemote: true,
+            },
+            {
+              title: 'UI/UX Tasarım Stajyeri (Figma & Prototipleme)',
+              description:
+                'Figma ile kullanıcı araştırmaları yapacak, wireframe ve interaktif prototipler tasarlayarak ürün deneyimini iyileştirecek stajyer tasarımcı.',
+              location: 'Ankara / Çankaya',
+              isRemote: true,
+            },
+            {
+              title: 'Siber Güvenlik ve Sızma Testi Stajyeri',
+              description:
+                'Web uygulamaları sızma testleri, zafiyet analizi ve SOC süreçlerinde deneyim kazanmak isteyen Siber Güvenlik meraklısı gençler.',
+              location: 'İstanbul / Ataşehir',
+              isRemote: false,
+            },
+            {
+              title: 'DevOps ve Bulut Altyapı Stajyeri (Docker & K8s)',
+              description:
+                'Docker, Kubernetes ve CI/CD süreçlerini otomatize edecek, AWS/GCP bulut mimarilerini öğrenecek stajyer mühendis.',
+              location: 'Kocaeli / Bilişim Vadisi',
+              isRemote: true,
+            },
+            {
+              title: 'QA & Yazılım Test Otomasyon Stajyeri',
+              description:
+                'Cypress ve Playwright ile uçtan uca otomatik test senaryoları yazacak, yazılım kalitesini artıracak detaycı stajyer.',
+              location: 'İstanbul / Şişli',
+              isRemote: true,
+            },
+            {
+              title: 'Gömülü Sistemler ve IoT Geliştirme Stajyeri',
+              description:
+                'C/C++ ve RTOS kullanarak akıllı donanım kartları ve IoT cihaz yazılımları geliştirecek stajyer mühendis.',
+              location: 'Ankara / Ostim Teknopark',
+              isRemote: false,
+            },
+            {
+              title: 'Veritabanı Yöneticisi (DBA) Stajyeri',
+              description:
+                'PostgreSQL, Redis ve MongoDB sorgu optimizasyonu ve yedekleme stratejileri üzerine çalışacak veri odaklı stajyer.',
+              location: 'İstanbul / Ümraniye',
+              isRemote: false,
+            },
+            {
+              title: 'Dijital Pazarlama ve SEO Stajyeri',
+              description:
+                'Google Analytics, SEO optimizasyonu ve sosyal medya içerik stratejilerini yönetecek yaratıcı pazarlama stajyeri.',
+              location: 'İzmir / Alsancak',
+              isRemote: true,
+            },
+            {
+              title: 'İnsan Kaynakları ve İşe Alım Stajyeri',
+              description:
+                'Teknoloji pozisyonları için yetenek avcılığı yapacak, mülakat süreçlerini ve stajyer programlarını koordine edecek İK stajyeri.',
+              location: 'İstanbul / Maslak',
+              isRemote: false,
+            },
+            {
+              title: 'Ürün Yönetimi (Product Management) Stajyeri',
+              description:
+                'Kullanıcı geri bildirimlerini analiz ederek ürün yol haritaları çıkaracak, Agile/Scrum takımlarıyla çalışacak Junior PM adayı.',
+              location: 'İstanbul / Levent',
+              isRemote: true,
+            },
+            {
+              title: 'Oyun Geliştirci Stajyeri (Unity & C#)',
+              description:
+                'Unity ve C# ile 2D/3D mobil ve PC oyun mekanikleri geliştirecek, fizik motorları üzerine çalışacak heyecanlı stajyer.',
+              location: 'Eskişehir / Anadolu Teknopark',
+              isRemote: false,
+            },
+            {
+              title:
+                'Unreal Engine 5 Teknik Sanatçı (Technical Artist) Stajyeri',
+              description:
+                'Shader, ışıklandırma ve görsel efektler (VFX) geliştirecek Unreal Engine tutkunu stajyer adayları.',
+              location: 'İstanbul / Beşiktaş',
+              isRemote: true,
+            },
+            {
+              title: 'Blokzincir ve Akıllı Sözleşme Geliştirici Stajyeri',
+              description:
+                'Solidity ve Web3.js ile Ethereum ağında merkeziyetsiz uygulamalar (DApp) yazacak araştırma meraklısı stajyer.',
+              location: 'İstanbul / Maslak',
+              isRemote: true,
+            },
+            {
+              title: 'Veri Analisti Stajyeri (Power BI & SQL)',
+              description:
+                'Büyük veri kümelerinden anlamlı iş zekası raporları ve gösterge panelleri (Dashboard) hazırlayacak stajyer.',
+              location: 'Ankara / Bilkent Cyberpark',
+              isRemote: false,
+            },
+            {
+              title: 'İçerik Pazarlama ve Metin Yazarlığı Stajyeri',
+              description:
+                'Teknoloji blokları için teknik makaleler yazacak, bülten ve sosyal medya metinleri üretecek Türkçe-İngilizce hakim stajyer.',
+              location: 'İstanbul / Kadıköy',
+              isRemote: true,
+            },
+            {
+              title: 'Müşteri Başarısı (Customer Success) Stajyeri',
+              description:
+                'SaaS ürünümüzü kullanan kurumsal müşterilerin teknik destek süreçlerini ve memnuniyetini yönetecek stajyer.',
+              location: 'İstanbul / Şişli',
+              isRemote: true,
+            },
+            {
+              title: 'Büyüme Pazarlaması (Growth Hacking) Stajyeri',
+              description:
+                'A/B testleri kurgulayacak, müşteri edinme kanallarını analiz edecek veri odaklı pazarlama stajyeri.',
+              location: 'İstanbul / Maslak',
+              isRemote: true,
+            },
+            {
+              title: 'Grafik Tasarım ve İllüstrasyon Stajyeri',
+              description:
+                'Adobe Illustrator ve Photoshop ile dijital medya görselleri, bannerlar ve maskot illüstrasyonları çizecek tasarımcı.',
+              location: 'İzmir / Karşıyaka',
+              isRemote: true,
+            },
+            {
+              title: 'Sistem Yöneticisi (System Admin) Stajyeri',
+              description:
+                'Linux sunucu kurulumları, ağ konfigürasyonları ve güvenlik duvarı ayarlarından sorumlu stajyer sistem yöneticisi.',
+              location: 'Ankara / Maltepe',
+              isRemote: false,
+            },
+            {
+              title: 'İş Analisti (Business Analyst) Stajyeri',
+              description:
+                'Müşteri taleplerini teknik gereksinim dökümanlarına (PRD) dönüştürecek analitik düşünen stajyer.',
+              location: 'İstanbul / Levent',
+              isRemote: false,
+            },
+            {
+              title: 'Doğal Dil İşleme (NLP) Araştırma Stajyeri',
+              description:
+                'Büyük Dil Modelleri (LLM), RAG mimarileri ve Türkçe metin işleme üzerine Ar-Ge çalışmaları yapacak stajyer.',
+              location: 'İstanbul / Maslak',
+              isRemote: true,
+            },
+            {
+              title: 'Bilgisayarlı Görü (Computer Vision) Stajyeri',
+              description:
+                'OpenCV ve YOLO modelleri ile nesne tespiti, yüz tanıma ve kamera görüntü işleme algoritmaları geliştirecek stajyer.',
+              location: 'Ankara / METUTECH',
+              isRemote: false,
+            },
+            {
+              title: 'Donanım Tasarım ve PCB Geliştirme Stajyeri',
+              description:
+                'Altium Designer ile elektronik devre kartları çizecek, SMD lehimleme ve test süreçlerinde rol alacak mühendislik stajyeri.',
+              location: 'Bursa / NOSAB',
+              isRemote: false,
+            },
+            {
+              title: 'Teknik Destek Mühendisi Stajyeri',
+              description:
+                'API entegrasyon hatalarını inceleyecek, yazılım ürünümüz için ilk seviye teknik destek sunacak iletişim yönü güçlü stajyer.',
+              location: 'İstanbul / Kadıköy',
+              isRemote: true,
+            },
+            {
+              title: 'Teknoloji Muhabiri ve Yayıncılık Stajyeri',
+              description:
+                'Yazılım ve girişimcilik dünyasından haberler derleyecek, röportajlar ve podcast yayınları hazırlayacak içerik stajyeri.',
+              location: 'İstanbul / Beşiktaş',
+              isRemote: true,
+            },
+            {
+              title: 'Proje Yönetimi Adayı (PMO) Stajyeri',
+              description:
+                'Jira, Confluence ve Trello üzerinde Agile proje takvimini izleyecek ve koordinasyon sağlayacak stajyer.',
+              location: 'İstanbul / Maslak',
+              isRemote: true,
+            },
+          ];
+
+          for (const item of sampleInternships) {
+            await this.internship.create({
+              data: {
+                ...item,
+                companyId,
+              },
+            });
+          }
+          this.logger.log(
+            '🎉 30 Adet zengin staj ilanı veritabanına başarıyla eklendi!',
+          );
+        }
+      }
 
       this.logger.log(
         '✅ Canlı veritabanı otomatik olarak başarıyla dolduruldu!',
