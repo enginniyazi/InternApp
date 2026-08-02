@@ -6,6 +6,11 @@ import './InternshipList.css';
 interface InternshipListProps {
   internships: InternshipData[];
   isCompany?: boolean;
+  studentProfile?: {
+    educationLevel?: string;
+    internshipStatus?: string;
+    skills?: string[];
+  };
   onApply?: (id: string) => void;
   onEdit?: (internship: InternshipData) => void;
   onDelete?: (id: string) => void;
@@ -17,6 +22,7 @@ interface InternshipListProps {
 export const InternshipList: React.FC<InternshipListProps> = ({
   internships,
   isCompany = false,
+  studentProfile,
   onApply,
   onEdit,
   onDelete,
@@ -28,6 +34,7 @@ export const InternshipList: React.FC<InternshipListProps> = ({
   const [onlyRemote, setOnlyRemote] = useState(false);
   const [selectedType, setSelectedType] = useState('ALL');
   const [selectedEdu, setSelectedEdu] = useState('ALL');
+  const [isSmartMatchActive, setIsSmartMatchActive] = useState(false);
 
   const filteredInternships = internships.filter((item) => {
     const term = searchTerm.toLowerCase();
@@ -41,8 +48,27 @@ export const InternshipList: React.FC<InternshipListProps> = ({
     const matchesType = selectedType === 'ALL' ? true : item.internshipType === selectedType;
     const matchesEdu = selectedEdu === 'ALL' ? true : item.targetEducationLevel === selectedEdu;
 
+    // Akıllı Eşleşme Aktifse: Öğrencinin eğitim seviyesine uymayan (örneğin Lise) ilanları KESİNLİKLE eliyoruz.
+    if (isSmartMatchActive && studentProfile?.educationLevel) {
+      const studentEdu = studentProfile.educationLevel;
+      if (item.targetEducationLevel && item.targetEducationLevel !== studentEdu) {
+        return false;
+      }
+    }
+
     return matchesSearch && matchesRemote && matchesType && matchesEdu;
   });
+
+  const handleSmartMatchToggle = () => {
+    if (isSmartMatchActive) {
+      setIsSmartMatchActive(false);
+      setSelectedEdu('ALL');
+    } else {
+      setIsSmartMatchActive(true);
+      const studentEdu = studentProfile?.educationLevel || 'BACHELOR';
+      setSelectedEdu(studentEdu);
+    }
+  };
 
   return (
     <div className="internship-list-container">
@@ -108,17 +134,11 @@ export const InternshipList: React.FC<InternshipListProps> = ({
         {!isCompany && (
           <button
             type="button"
-            className={`smart-match-btn ${selectedEdu === 'BACHELOR' ? 'active' : ''}`}
-            onClick={() => {
-              if (selectedEdu === 'BACHELOR') {
-                setSelectedEdu('ALL');
-              } else {
-                setSelectedEdu('BACHELOR');
-              }
-            }}
+            className={`smart-match-btn ${isSmartMatchActive ? 'active' : ''}`}
+            onClick={handleSmartMatchToggle}
             title="Profil eğitim seviyenize en uygun ilanları süzün"
           >
-            ✨ Bana Uygun İlanlar
+            {isSmartMatchActive ? '✨ Tüm İlanları Göster' : '✨ Bana Uygun İlanlar'}
           </button>
         )}
       </div>

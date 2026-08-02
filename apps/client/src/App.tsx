@@ -488,6 +488,7 @@ function App() {
           <InternshipList
             internships={internships}
             isCompany={userRole === 'COMPANY'}
+            studentProfile={studentProfile}
             onApply={handleApply}
             onEdit={handleEdit}
             onDelete={handleDelete}
