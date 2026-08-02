@@ -102,7 +102,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
             if (companyUser.companyProfile) {
                 const companyId = companyUser.companyProfile.id;
                 await this.internship.deleteMany({ where: { companyId } });
-                const sampleInternships = [
+                const baseTemplates = [
                     {
                         title: 'Frontend Developer Stajyeri (React & TypeScript)',
                         description: 'Modern web teknolojileri ile kullanıcı dostu arayüzler geliştirecek, React, TypeScript ve TailwindCSS deneyimi kazanmak isteyen tutkulu stajyerler arıyoruz.',
@@ -289,7 +289,83 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         requiredSkills: ['Donanım', 'Ağ Kurulumu', 'Windows Server'],
                         quota: 4,
                     },
+                    {
+                        title: 'Veri Analitiği ve İş Zekası Stajyeri (PowerBI)',
+                        description: 'Büyük veri setlerini işleyecek, PowerBI ve SQL sorguları ile yönetici raporlama panelleri oluşturacak analitik düşünen stajyer.',
+                        location: 'Eskişehir / Anadolu Teknopark',
+                        isRemote: true,
+                        internshipType: 'VOLUNTARY',
+                        targetEducationLevel: 'BACHELOR',
+                        targetDepartments: ['Endüstri Mühendisliği', 'YBS', 'Matematik'],
+                        weeklyDays: 3,
+                        durationWeeks: 12,
+                        workModel: 'REMOTE',
+                        city: 'Eskişehir',
+                        stipendType: 'MINIMUM_WAGE',
+                        hasMealAllowance: true,
+                        hasTransportation: false,
+                        hasEquipment: true,
+                        returnOfferProbability: 'HIGH',
+                        requiredSkills: ['PowerBI', 'SQL', 'Excel', 'Python'],
+                        quota: 2,
+                    },
+                    {
+                        title: 'Android (Kotlin & Jetpack Compose) Stajyeri',
+                        description: 'Modern Android mimarilerine (MVVM, Clean Architecture) hakim, Jetpack Compose ile mobil uygulamalar geliştirecek genç geliştirici.',
+                        location: 'Bursa / Nilüfer',
+                        isRemote: false,
+                        internshipType: 'MANDATORY',
+                        targetEducationLevel: 'ASSOCIATE',
+                        targetDepartments: [
+                            'Bilgisayar Programcılığı',
+                            'Yazılım Mühendisliği',
+                        ],
+                        weeklyDays: 4,
+                        durationWeeks: 14,
+                        workModel: 'HYBRID',
+                        city: 'Bursa',
+                        stipendType: 'MINIMUM_WAGE',
+                        hasMealAllowance: true,
+                        hasTransportation: true,
+                        hasEquipment: true,
+                        returnOfferProbability: 'HIGH',
+                        requiredSkills: ['Kotlin', 'Android Studio', 'Jetpack Compose'],
+                        quota: 2,
+                    },
                 ];
+                const sampleInternships = [
+                    ...baseTemplates,
+                    ...baseTemplates.map((t, idx) => ({
+                        ...t,
+                        title: `${t.title} - ${idx % 2 === 0 ? 'Proje Grubu' : 'Ar-Ge Ekibi'}`,
+                        city: idx % 3 === 0 ? 'İstanbul' : idx % 3 === 1 ? 'Ankara' : 'İzmir',
+                        location: idx % 3 === 0
+                            ? 'İstanbul / Teknopark'
+                            : idx % 3 === 1
+                                ? 'Ankara / Bilkent'
+                                : 'İzmir / Alsancak',
+                        quota: (idx % 3) + 1,
+                        weeklyDays: idx % 2 === 0 ? 3 : 5,
+                    })),
+                    ...baseTemplates.map((t, idx) => ({
+                        ...t,
+                        title: `${t.title} (${idx % 2 === 0 ? 'Güz Dönemi' : 'Bahar Dönemi'})`,
+                        internshipType: (idx % 2 === 0 ? 'LONG_TERM' : 'VOLUNTARY'),
+                        targetEducationLevel: (idx % 3 === 0
+                            ? 'ASSOCIATE'
+                            : idx % 3 === 1
+                                ? 'BACHELOR'
+                                : 'MASTER_PHD'),
+                        workModel: (idx % 2 === 0 ? 'REMOTE' : 'HYBRID'),
+                        city: idx % 4 === 0
+                            ? 'Antalya'
+                            : idx % 4 === 1
+                                ? 'Kocaeli'
+                                : idx % 4 === 2
+                                    ? 'Eskişehir'
+                                    : 'Gaziantep',
+                    })),
+                ].slice(0, 30);
                 for (const item of sampleInternships) {
                     await this.internship.create({
                         data: {

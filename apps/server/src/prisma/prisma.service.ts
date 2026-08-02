@@ -4,7 +4,13 @@ import {
   OnModuleDestroy,
   Logger,
 } from '@nestjs/common';
-import { PrismaClient, Role } from '@prisma/client';
+import {
+  PrismaClient,
+  Role,
+  EducationLevel,
+  InternshipType,
+  WorkModel,
+} from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -83,7 +89,7 @@ export class PrismaService
         // Veritabanındaki eski varsayılan ilanları temizleyip yeni çeşitli ilanları yükle
         await this.internship.deleteMany({ where: { companyId } });
 
-        const sampleInternships = [
+        const baseTemplates = [
           {
             title: 'Frontend Developer Stajyeri (React & TypeScript)',
             description:
@@ -278,7 +284,92 @@ export class PrismaService
             requiredSkills: ['Donanım', 'Ağ Kurulumu', 'Windows Server'],
             quota: 4,
           },
+          {
+            title: 'Veri Analitiği ve İş Zekası Stajyeri (PowerBI)',
+            description:
+              'Büyük veri setlerini işleyecek, PowerBI ve SQL sorguları ile yönetici raporlama panelleri oluşturacak analitik düşünen stajyer.',
+            location: 'Eskişehir / Anadolu Teknopark',
+            isRemote: true,
+            internshipType: 'VOLUNTARY' as const,
+            targetEducationLevel: 'BACHELOR' as const,
+            targetDepartments: ['Endüstri Mühendisliği', 'YBS', 'Matematik'],
+            weeklyDays: 3,
+            durationWeeks: 12,
+            workModel: 'REMOTE' as const,
+            city: 'Eskişehir',
+            stipendType: 'MINIMUM_WAGE' as const,
+            hasMealAllowance: true,
+            hasTransportation: false,
+            hasEquipment: true,
+            returnOfferProbability: 'HIGH' as const,
+            requiredSkills: ['PowerBI', 'SQL', 'Excel', 'Python'],
+            quota: 2,
+          },
+          {
+            title: 'Android (Kotlin & Jetpack Compose) Stajyeri',
+            description:
+              'Modern Android mimarilerine (MVVM, Clean Architecture) hakim, Jetpack Compose ile mobil uygulamalar geliştirecek genç geliştirici.',
+            location: 'Bursa / Nilüfer',
+            isRemote: false,
+            internshipType: 'MANDATORY' as const,
+            targetEducationLevel: 'ASSOCIATE' as const,
+            targetDepartments: [
+              'Bilgisayar Programcılığı',
+              'Yazılım Mühendisliği',
+            ],
+            weeklyDays: 4,
+            durationWeeks: 14,
+            workModel: 'HYBRID' as const,
+            city: 'Bursa',
+            stipendType: 'MINIMUM_WAGE' as const,
+            hasMealAllowance: true,
+            hasTransportation: true,
+            hasEquipment: true,
+            returnOfferProbability: 'HIGH' as const,
+            requiredSkills: ['Kotlin', 'Android Studio', 'Jetpack Compose'],
+            quota: 2,
+          },
         ];
+
+        // 10 Temel İlan Şablonunu Farklı Varyasyonlarla 30 Adede Tamamla
+        const sampleInternships = [
+          ...baseTemplates,
+          ...baseTemplates.map((t, idx) => ({
+            ...t,
+            title: `${t.title} - ${idx % 2 === 0 ? 'Proje Grubu' : 'Ar-Ge Ekibi'}`,
+            city:
+              idx % 3 === 0 ? 'İstanbul' : idx % 3 === 1 ? 'Ankara' : 'İzmir',
+            location:
+              idx % 3 === 0
+                ? 'İstanbul / Teknopark'
+                : idx % 3 === 1
+                  ? 'Ankara / Bilkent'
+                  : 'İzmir / Alsancak',
+            quota: (idx % 3) + 1,
+            weeklyDays: idx % 2 === 0 ? 3 : 5,
+          })),
+          ...baseTemplates.map((t, idx) => ({
+            ...t,
+            title: `${t.title} (${idx % 2 === 0 ? 'Güz Dönemi' : 'Bahar Dönemi'})`,
+            internshipType: (idx % 2 === 0
+              ? 'LONG_TERM'
+              : 'VOLUNTARY') as InternshipType,
+            targetEducationLevel: (idx % 3 === 0
+              ? 'ASSOCIATE'
+              : idx % 3 === 1
+                ? 'BACHELOR'
+                : 'MASTER_PHD') as EducationLevel,
+            workModel: (idx % 2 === 0 ? 'REMOTE' : 'HYBRID') as WorkModel,
+            city:
+              idx % 4 === 0
+                ? 'Antalya'
+                : idx % 4 === 1
+                  ? 'Kocaeli'
+                  : idx % 4 === 2
+                    ? 'Eskişehir'
+                    : 'Gaziantep',
+          })),
+        ].slice(0, 30);
 
         for (const item of sampleInternships) {
           await this.internship.create({
