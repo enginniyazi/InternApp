@@ -53,12 +53,14 @@ let ProfilesService = class ProfilesService {
                 lastName: dto.lastName || 'Kullanıcı',
                 phone: dto.phone,
                 bio: dto.bio,
+                cvUrl: dto.cvUrl,
             },
             update: {
                 ...(dto.firstName && { firstName: dto.firstName }),
                 ...(dto.lastName && { lastName: dto.lastName }),
                 ...(dto.phone !== undefined && { phone: dto.phone }),
                 ...(dto.bio !== undefined && { bio: dto.bio }),
+                ...(dto.cvUrl !== undefined && { cvUrl: dto.cvUrl }),
             },
         });
     }

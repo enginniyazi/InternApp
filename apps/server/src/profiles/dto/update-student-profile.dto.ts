@@ -27,4 +27,12 @@ export class UpdateStudentProfileDto {
   @IsOptional()
   @IsString()
   bio?: string;
+
+  @ApiPropertyOptional({
+    description: 'CV Dosya Bağlantısı (URL)',
+    example: 'https://storage.com/cv.pdf',
+  })
+  @IsOptional()
+  @IsString()
+  cvUrl?: string;
 }

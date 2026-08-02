@@ -17,6 +17,7 @@ class UpdateStudentProfileDto {
     lastName;
     phone;
     bio;
+    cvUrl;
 }
 exports.UpdateStudentProfileDto = UpdateStudentProfileDto;
 __decorate([
@@ -49,4 +50,13 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateStudentProfileDto.prototype, "bio", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'CV Dosya Bağlantısı (URL)',
+        example: 'https://storage.com/cv.pdf',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateStudentProfileDto.prototype, "cvUrl", void 0);
 //# sourceMappingURL=update-student-profile.dto.js.map

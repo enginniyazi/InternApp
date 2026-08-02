@@ -3,4 +3,5 @@ export declare class UpdateStudentProfileDto {
     lastName?: string;
     phone?: string;
     bio?: string;
+    cvUrl?: string;
 }
