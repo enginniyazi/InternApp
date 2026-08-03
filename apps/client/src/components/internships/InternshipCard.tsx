@@ -300,7 +300,7 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
                   className="btn-primary"
                   onClick={() => {
                     setShowDetailModal(false);
-                    onApply && onApply(internship.id);
+                    onApply?.(internship.id);
                   }}
                 >
                   Hemen Başvur
