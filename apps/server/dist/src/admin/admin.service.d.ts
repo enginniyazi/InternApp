@@ -22,6 +22,7 @@ export declare class AdminService {
         website: string | null;
         description: string | null;
         logoUrl: string | null;
+        isApproved: boolean;
         createdAt: Date;
         updatedAt: Date;
     })[]>;
@@ -32,6 +33,7 @@ export declare class AdminService {
         website: string | null;
         description: string | null;
         logoUrl: string | null;
+        isApproved: boolean;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -41,14 +43,36 @@ export declare class AdminService {
         role: import(".prisma/client").$Enums.Role;
         createdAt: Date;
         studentProfile: {
+            id: string;
+            userId: string;
             firstName: string;
             lastName: string;
+            phone: string | null;
+            city: string | null;
             university: string | null;
             department: string | null;
+            grade: string | null;
+            gpa: number | null;
+            educationLevel: import(".prisma/client").$Enums.EducationLevel | null;
+            internshipStatus: import(".prisma/client").$Enums.InternshipType | null;
+            skills: string[];
+            linkedinUrl: string | null;
+            githubUrl: string | null;
+            cvUrl: string | null;
+            bio: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         } | null;
         companyProfile: {
+            id: string;
+            userId: string;
             companyName: string;
             website: string | null;
+            description: string | null;
+            logoUrl: string | null;
+            isApproved: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         } | null;
     }[]>;
     deleteUser(userId: string): Promise<{
@@ -63,6 +87,8 @@ export declare class AdminService {
     getAllInternships(): Promise<({
         company: {
             companyName: string;
+            website: string | null;
+            isApproved: boolean;
         };
         _count: {
             applications: number;

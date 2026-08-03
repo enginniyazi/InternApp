@@ -59,6 +59,7 @@ let AdminService = class AdminService {
         return this.prisma.companyProfile.update({
             where: { id: companyId },
             data: {
+                isApproved: !company.isApproved,
                 updatedAt: new Date(),
             },
         });
@@ -70,20 +71,8 @@ let AdminService = class AdminService {
                 email: true,
                 role: true,
                 createdAt: true,
-                studentProfile: {
-                    select: {
-                        firstName: true,
-                        lastName: true,
-                        university: true,
-                        department: true,
-                    },
-                },
-                companyProfile: {
-                    select: {
-                        companyName: true,
-                        website: true,
-                    },
-                },
+                studentProfile: true,
+                companyProfile: true,
             },
             orderBy: { createdAt: 'desc' },
         });
@@ -100,6 +89,8 @@ let AdminService = class AdminService {
                 company: {
                     select: {
                         companyName: true,
+                        website: true,
+                        isApproved: true,
                     },
                 },
                 _count: {
@@ -110,7 +101,9 @@ let AdminService = class AdminService {
         });
     }
     async deleteInternship(internshipId) {
-        const item = await this.prisma.internship.findUnique({ where: { id: internshipId } });
+        const item = await this.prisma.internship.findUnique({
+            where: { id: internshipId },
+        });
         if (!item)
             throw new common_1.NotFoundException('İlan bulunamadı.');
         return this.prisma.internship.delete({ where: { id: internshipId } });

@@ -58,6 +58,7 @@ export class AdminService {
     return this.prisma.companyProfile.update({
       where: { id: companyId },
       data: {
+        isApproved: !company.isApproved,
         updatedAt: new Date(),
       },
     });
@@ -70,20 +71,8 @@ export class AdminService {
         email: true,
         role: true,
         createdAt: true,
-        studentProfile: {
-          select: {
-            firstName: true,
-            lastName: true,
-            university: true,
-            department: true,
-          },
-        },
-        companyProfile: {
-          select: {
-            companyName: true,
-            website: true,
-          },
-        },
+        studentProfile: true,
+        companyProfile: true,
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -101,6 +90,8 @@ export class AdminService {
         company: {
           select: {
             companyName: true,
+            website: true,
+            isApproved: true,
           },
         },
         _count: {

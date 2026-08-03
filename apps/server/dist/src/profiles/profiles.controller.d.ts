@@ -71,6 +71,7 @@ export declare class ProfilesController {
         website: string | null;
         description: string | null;
         logoUrl: string | null;
+        isApproved: boolean;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -81,6 +82,7 @@ export declare class ProfilesController {
         website: string | null;
         description: string | null;
         logoUrl: string | null;
+        isApproved: boolean;
         createdAt: Date;
         updatedAt: Date;
     }>;

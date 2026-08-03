@@ -17,6 +17,7 @@ export interface AdminCompanyItem {
   companyName: string;
   website?: string;
   description?: string;
+  isApproved?: boolean;
   createdAt: string;
   user: {
     email: string;
@@ -31,25 +32,46 @@ export interface AdminUserItem {
   studentProfile?: {
     firstName: string;
     lastName: string;
+    phone?: string;
+    city?: string;
     university?: string;
     department?: string;
+    grade?: string;
+    gpa?: number;
+    educationLevel?: string;
+    skills?: string[];
+    bio?: string;
+    resumeUrl?: string;
   };
   companyProfile?: {
     companyName: string;
     website?: string;
+    description?: string;
+    isApproved?: boolean;
   };
 }
 
 export interface AdminInternshipItem {
   id: string;
   title: string;
+  description: string;
+  requirements?: string[];
   location: string;
   city: string;
+  workModel?: string;
   internshipType: string;
   targetEducationLevel: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  stipendType?: string;
+  perks?: string[];
+  durationWeeks?: number;
+  daysPerWeek?: number;
   createdAt: string;
   company: {
     companyName: string;
+    website?: string;
+    isApproved?: boolean;
   };
   _count: {
     applications: number;
