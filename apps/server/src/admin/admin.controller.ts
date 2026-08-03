@@ -1,4 +1,11 @@
-import { Controller, Get, Patch, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Delete,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -30,5 +37,29 @@ export class AdminController {
   @Patch('companies/:id/approve')
   approveCompany(@Param('id') id: string) {
     return this.adminService.approveCompany(id);
+  }
+
+  @ApiOperation({ summary: 'Sistemdeki Tüm Kullanıcıları Listele' })
+  @Get('users')
+  getAllUsers() {
+    return this.adminService.getAllUsers();
+  }
+
+  @ApiOperation({ summary: 'Kullanıcıyı Hesabıyla Birlikte Sil' })
+  @Delete('users/:id')
+  deleteUser(@Param('id') id: string) {
+    return this.adminService.deleteUser(id);
+  }
+
+  @ApiOperation({ summary: 'Moderasyon için Tüm İlanları Listele' })
+  @Get('internships')
+  getAllInternships() {
+    return this.adminService.getAllInternships();
+  }
+
+  @ApiOperation({ summary: 'Usulsüz İlanı Platformdan Sil' })
+  @Delete('internships/:id')
+  deleteInternship(@Param('id') id: string) {
+    return this.adminService.deleteInternship(id);
   }
 }

@@ -23,6 +23,39 @@ export interface AdminCompanyItem {
   };
 }
 
+export interface AdminUserItem {
+  id: string;
+  email: string;
+  role: 'STUDENT' | 'COMPANY' | 'ADMIN';
+  createdAt: string;
+  studentProfile?: {
+    firstName: string;
+    lastName: string;
+    university?: string;
+    department?: string;
+  };
+  companyProfile?: {
+    companyName: string;
+    website?: string;
+  };
+}
+
+export interface AdminInternshipItem {
+  id: string;
+  title: string;
+  location: string;
+  city: string;
+  internshipType: string;
+  targetEducationLevel: string;
+  createdAt: string;
+  company: {
+    companyName: string;
+  };
+  _count: {
+    applications: number;
+  };
+}
+
 export async function fetchAdminStats(): Promise<AdminStats> {
   return api.get<AdminStats>('/admin/stats');
 }
@@ -33,4 +66,20 @@ export async function fetchAdminCompanies(): Promise<AdminCompanyItem[]> {
 
 export async function approveCompany(companyId: string): Promise<void> {
   await api.patch(`/admin/companies/${companyId}/approve`);
+}
+
+export async function fetchAdminUsers(): Promise<AdminUserItem[]> {
+  return api.get<AdminUserItem[]>('/admin/users');
+}
+
+export async function deleteAdminUser(userId: string): Promise<void> {
+  await api.delete(`/admin/users/${userId}`);
+}
+
+export async function fetchAdminInternships(): Promise<AdminInternshipItem[]> {
+  return api.get<AdminInternshipItem[]>('/admin/internships');
+}
+
+export async function deleteAdminInternship(internshipId: string): Promise<void> {
+  await api.delete(`/admin/internships/${internshipId}`);
 }

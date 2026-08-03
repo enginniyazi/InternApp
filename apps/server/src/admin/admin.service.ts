@@ -55,12 +55,67 @@ export class AdminService {
       throw new NotFoundException('Şirket profili bulunamadı.');
     }
 
-    // Profitably mark as updated / verified
     return this.prisma.companyProfile.update({
       where: { id: companyId },
       data: {
         updatedAt: new Date(),
       },
     });
+  }
+
+  async getAllUsers() {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        studentProfile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            university: true,
+            department: true,
+          },
+        },
+        companyProfile: {
+          select: {
+            companyName: true,
+            website: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async deleteUser(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('Kullanıcı bulunamadı.');
+    return this.prisma.user.delete({ where: { id: userId } });
+  }
+
+  async getAllInternships() {
+    return this.prisma.internship.findMany({
+      include: {
+        company: {
+          select: {
+            companyName: true,
+          },
+        },
+        _count: {
+          select: { applications: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async deleteInternship(internshipId: string) {
+    const item = await this.prisma.internship.findUnique({
+      where: { id: internshipId },
+    });
+    if (!item) throw new NotFoundException('İlan bulunamadı.');
+    return this.prisma.internship.delete({ where: { id: internshipId } });
   }
 }

@@ -34,6 +34,18 @@ let AdminController = class AdminController {
     approveCompany(id) {
         return this.adminService.approveCompany(id);
     }
+    getAllUsers() {
+        return this.adminService.getAllUsers();
+    }
+    deleteUser(id) {
+        return this.adminService.deleteUser(id);
+    }
+    getAllInternships() {
+        return this.adminService.getAllInternships();
+    }
+    deleteInternship(id) {
+        return this.adminService.deleteInternship(id);
+    }
 };
 exports.AdminController = AdminController;
 __decorate([
@@ -58,6 +70,36 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "approveCompany", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Sistemdeki Tüm Kullanıcıları Listele' }),
+    (0, common_1.Get)('users'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getAllUsers", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Kullanıcıyı Hesabıyla Birlikte Sil' }),
+    (0, common_1.Delete)('users/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteUser", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Moderasyon için Tüm İlanları Listele' }),
+    (0, common_1.Get)('internships'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getAllInternships", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Usulsüz İlanı Platformdan Sil' }),
+    (0, common_1.Delete)('internships/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteInternship", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Paneli (Admin)'),
     (0, swagger_1.ApiBearerAuth)(),
