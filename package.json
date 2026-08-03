@@ -6,7 +6,7 @@
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.tsx,.js,.jsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "check:reuse": "tsx scripts/check-reusability.ts",
     "test": "echo \"No tests defined yet\" && exit 0",
     "build": "echo \"Build placeholder – add Vite/Nest build commands here\" && exit 0"
