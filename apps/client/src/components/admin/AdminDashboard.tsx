@@ -91,6 +91,12 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
+  const changeTab = (tab: AdminTab) => {
+    setActiveTab(tab);
+    setSelectedInternship(null);
+    setSelectedUser(null);
+  };
+
   return (
     <div className="admin-dashboard-container">
       <div
@@ -122,28 +128,28 @@ export const AdminDashboard: React.FC = () => {
         <button
           type="button"
           className={`admin-tab-btn ${activeTab === 'stats' ? 'active' : ''}`}
-          onClick={() => setActiveTab('stats')}
+          onClick={() => changeTab('stats')}
         >
           📊 Genel İstatistikler
         </button>
         <button
           type="button"
           className={`admin-tab-btn ${activeTab === 'companies' ? 'active' : ''}`}
-          onClick={() => setActiveTab('companies')}
+          onClick={() => changeTab('companies')}
         >
           🏢 Şirket Onayları ({companies.length})
         </button>
         <button
           type="button"
           className={`admin-tab-btn ${activeTab === 'internships' ? 'active' : ''}`}
-          onClick={() => setActiveTab('internships')}
+          onClick={() => changeTab('internships')}
         >
           📢 İlan Moderasyonu ({internships.length})
         </button>
         <button
           type="button"
           className={`admin-tab-btn ${activeTab === 'users' ? 'active' : ''}`}
-          onClick={() => setActiveTab('users')}
+          onClick={() => changeTab('users')}
         >
           👥 Kullanıcı Yönetimi ({users.length})
         </button>
