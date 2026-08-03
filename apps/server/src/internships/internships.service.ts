@@ -64,6 +64,7 @@ export class InternshipsService {
           ? new Date(dto.expectedStartDate)
           : null,
         quota: dto.quota ?? 1,
+        status: 'PASSIVE', // Şirket eklediğinde Admin onayı beklenir (PASSIVE)
       },
       include: {
         company: true,
@@ -82,7 +83,10 @@ export class InternshipsService {
       workModel,
     } = filterDto;
 
-    const where: Prisma.InternshipWhereInput = {};
+    // Öğrenciler ve genel kullanıcılar yalnızca ADMIN tarafından onaylanmış (ACTIVE) ilanları görebilir
+    const where: Prisma.InternshipWhereInput = {
+      status: 'ACTIVE',
+    };
 
     if (search) {
       where.OR = [

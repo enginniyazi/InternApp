@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
+import { ConfirmModal } from '../common/ConfirmModal';
 import {
   fetchAdminStats,
   fetchAdminCompanies,
@@ -8,6 +9,7 @@ import {
   deleteAdminUser,
   fetchAdminInternships,
   deleteAdminInternship,
+  toggleAdminInternshipStatus,
 } from '../../lib/adminService';
 import type {
   AdminStats,
@@ -36,6 +38,21 @@ export const AdminDashboard: React.FC = () => {
   const [selectedInternship, setSelectedInternship] = useState<AdminInternshipItem | null>(null);
   const [selectedUser, setSelectedUser] = useState<AdminUserItem | null>(null);
 
+  // Şık Onay (Confirm) Modalı State'i
+  const [confirmConfig, setConfirmConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    confirmText?: string;
+    type?: 'danger' | 'warning' | 'info';
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
+
   const loadData = () => {
     fetchAdminStats()
       .then(setStats)
@@ -55,40 +72,103 @@ export const AdminDashboard: React.FC = () => {
     loadData();
   }, []);
 
-  const handleToggleApproveCompany = async (id: string, currentApproved?: boolean) => {
-    try {
-      await approveCompany(id);
-      setActionMsg(
-        currentApproved ? 'Şirket onayı kaldırıldı / askıya alındı.' : 'Şirket başarıyla onaylandı!'
-      );
-      loadData();
-    } catch {
-      setActionMsg('İşlem başarısız.');
-    }
+  const handleToggleApproveCompany = (
+    id: string,
+    companyName: string,
+    currentApproved?: boolean
+  ) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: currentApproved ? 'Şirket Onayını Kaldır / Askıya Al' : 'Şirketi Onayla',
+      message: currentApproved
+        ? `"${companyName}" şirketinin onayını kaldırmak ve ilan yayınlama yetkisini durdurmak istediğinize emin misiniz?`
+        : `"${companyName}" şirketini doğrulamak ve platformda aktif ilan eklemesine izin vermek istediğinize emin misiniz?`,
+      confirmText: currentApproved ? 'Onayı Kaldır' : 'Şirketi Onayla',
+      type: currentApproved ? 'warning' : 'info',
+      onConfirm: async () => {
+        try {
+          await approveCompany(id);
+          setActionMsg(
+            currentApproved
+              ? 'Şirket onayı kaldırıldı / askıya alındı.'
+              : 'Şirket başarıyla onaylandı!'
+          );
+          loadData();
+        } catch {
+          setActionMsg('İşlem başarısız.');
+        } finally {
+          setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+    });
   };
 
-  const handleDeleteUser = async (id: string, email: string) => {
-    if (!window.confirm(`${email} kullanıcısını silmek istediğinize emin misiniz?`)) return;
-    try {
-      await deleteAdminUser(id);
-      setActionMsg('Kullanıcı sistemden silindi.');
-      if (selectedUser?.id === id) setSelectedUser(null);
-      loadData();
-    } catch {
-      setActionMsg('Kullanıcı silinemedi.');
-    }
+  const handleDeleteUser = (id: string, email: string) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: 'Kullanıcıyı Sil',
+      message: `"${email}" e-posta adresli kullanıcıyı ve tüm profil verilerini kalıcı olarak silmek istediğinizden emin misiniz?`,
+      confirmText: 'Evet, Sil',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await deleteAdminUser(id);
+          setActionMsg('Kullanıcı sistemden silindi.');
+          if (selectedUser?.id === id) setSelectedUser(null);
+          loadData();
+        } catch {
+          setActionMsg('Kullanıcı silinemedi.');
+        } finally {
+          setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+    });
   };
 
-  const handleDeleteInternship = async (id: string, title: string) => {
-    if (!window.confirm(`"${title}" ilanını yayından kaldırmak istediğinize emin misiniz?`)) return;
-    try {
-      await deleteAdminInternship(id);
-      setActionMsg('İlan başarıyla yayından kaldırıldı.');
-      if (selectedInternship?.id === id) setSelectedInternship(null);
-      loadData();
-    } catch {
-      setActionMsg('İlan silinemedi.');
-    }
+  const handleDeleteInternship = (id: string, title: string) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: 'İlanı Kalıcı Olarak Sil',
+      message: `"${title}" başlıklı staj ilanını platformdan tamamen kaldırmak istediğinize emin misiniz?`,
+      confirmText: 'Evet, İlanı Sil',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await deleteAdminInternship(id);
+          setActionMsg('İlan başarıyla yayından kaldırıldı.');
+          if (selectedInternship?.id === id) setSelectedInternship(null);
+          loadData();
+        } catch {
+          setActionMsg('İlan silinemedi.');
+        } finally {
+          setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+    });
+  };
+
+  const handleToggleInternshipStatus = async (id: string, currentStatus?: string) => {
+    const isActivating = currentStatus !== 'ACTIVE';
+    setConfirmConfig({
+      isOpen: true,
+      title: isActivating ? 'İlanı Yayına Al (Onayla)' : 'İlanı Pasife Al',
+      message: isActivating
+        ? 'Bu ilan incelendi ve öğrenciler tarafından görülebilmesi için yayına alınacak. Onaylıyor musunuz?'
+        : 'Bu ilan yayından kaldırılacak ve pasife alınacak. İletişimi durdurmak istiyor musunuz?',
+      confirmText: isActivating ? 'Evet, Yayına Al' : 'Pasife Al',
+      type: isActivating ? 'info' : 'warning',
+      onConfirm: async () => {
+        try {
+          await toggleAdminInternshipStatus(id);
+          setActionMsg(isActivating ? 'İlan onaylandı ve yayına alındı!' : 'İlan pasife alındı.');
+          loadData();
+        } catch {
+          setActionMsg('İlan durumu değiştirilemedi.');
+        } finally {
+          setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+    });
   };
 
   const changeTab = (tab: AdminTab) => {
@@ -270,7 +350,9 @@ export const AdminDashboard: React.FC = () => {
                       type="button"
                       className={comp.isApproved ? 'btn-secondary' : 'btn-primary'}
                       style={{ padding: '6px 12px', fontSize: '12px' }}
-                      onClick={() => handleToggleApproveCompany(comp.id, comp.isApproved)}
+                      onClick={() =>
+                        handleToggleApproveCompany(comp.id, comp.companyName, comp.isApproved)
+                      }
                     >
                       {comp.isApproved ? '🚫 Onayı Kaldır (Askıya Al)' : '✅ Şirketi Onayla'}
                     </button>
@@ -296,6 +378,7 @@ export const AdminDashboard: React.FC = () => {
                 <th>Şirket</th>
                 <th>Şehir / Lokasyon</th>
                 <th>Staj Seviyesi</th>
+                <th>Durum</th>
                 <th>Başvuru</th>
                 <th>İşlemler</th>
               </tr>
@@ -308,12 +391,49 @@ export const AdminDashboard: React.FC = () => {
                   <td>{item.city || item.location}</td>
                   <td>{item.targetEducationLevel || 'Lisans'}</td>
                   <td>
+                    {item.status === 'ACTIVE' ? (
+                      <span
+                        style={{
+                          background: 'rgba(16, 185, 129, 0.2)',
+                          color: '#34d399',
+                          padding: '4px 10px',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                        }}
+                      >
+                        🟢 Yayında (Aktif)
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          background: 'rgba(245, 158, 11, 0.2)',
+                          color: '#fbbf24',
+                          padding: '4px 10px',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                        }}
+                      >
+                        🟡 Onay Bekliyor (Pasif)
+                      </span>
+                    )}
+                  </td>
+                  <td>
                     <span style={{ fontWeight: 700, color: '#818cf8' }}>
                       {item._count?.applications || 0} Aday
                     </span>
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: '6px' }}>
+                      <button
+                        type="button"
+                        className={item.status === 'ACTIVE' ? 'btn-secondary' : 'btn-primary'}
+                        style={{ padding: '6px 10px', fontSize: '12px' }}
+                        onClick={() => handleToggleInternshipStatus(item.id, item.status)}
+                      >
+                        {item.status === 'ACTIVE' ? '🟡 Pasife Al' : '🟢 Yayına Al (Onayla)'}
+                      </button>
                       <button
                         type="button"
                         className="btn-secondary"
@@ -682,6 +802,17 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* 🛑 Şık Onay (Confirm) Modalı */}
+      <ConfirmModal
+        isOpen={confirmConfig.isOpen}
+        title={confirmConfig.title}
+        message={confirmConfig.message}
+        confirmText={confirmConfig.confirmText}
+        type={confirmConfig.type}
+        onConfirm={confirmConfig.onConfirm}
+        onCancel={() => setConfirmConfig((prev) => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 };

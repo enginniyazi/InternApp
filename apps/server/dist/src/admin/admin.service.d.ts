@@ -158,4 +158,36 @@ export declare class AdminService {
         createdAt: Date;
         updatedAt: Date;
     }>;
+    toggleInternshipStatus(internshipId: string): Promise<{
+        id: string;
+        companyId: string;
+        title: string;
+        description: string;
+        location: string;
+        isRemote: boolean;
+        requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
+        internshipType: import(".prisma/client").$Enums.InternshipType;
+        targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
+        targetDepartments: string[];
+        targetGrades: number[];
+        weeklyDays: number;
+        durationWeeks: number;
+        workModel: import(".prisma/client").$Enums.WorkModel;
+        city: string;
+        district: string | null;
+        stipendType: import(".prisma/client").$Enums.StipendType;
+        hasMealAllowance: boolean;
+        hasTransportation: boolean;
+        hasEquipment: boolean;
+        returnOfferProbability: import(".prisma/client").$Enums.ReturnOfferProbability;
+        requiredSkills: string[];
+        languageRequirements: string | null;
+        applicationDeadline: Date | null;
+        expectedStartDate: Date | null;
+        quota: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
 }

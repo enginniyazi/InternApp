@@ -64,6 +64,7 @@ let InternshipsService = class InternshipsService {
                     ? new Date(dto.expectedStartDate)
                     : null,
                 quota: dto.quota ?? 1,
+                status: 'PASSIVE',
             },
             include: {
                 company: true,
@@ -72,7 +73,9 @@ let InternshipsService = class InternshipsService {
     }
     async findAll(filterDto) {
         const { search, location, city, isRemote, internshipType, targetEducationLevel, workModel, } = filterDto;
-        const where = {};
+        const where = {
+            status: 'ACTIVE',
+        };
         if (search) {
             where.OR = [
                 { title: { contains: search, mode: 'insensitive' } },

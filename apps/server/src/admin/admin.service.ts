@@ -109,4 +109,17 @@ export class AdminService {
     if (!item) throw new NotFoundException('İlan bulunamadı.');
     return this.prisma.internship.delete({ where: { id: internshipId } });
   }
+
+  async toggleInternshipStatus(internshipId: string) {
+    const item = await this.prisma.internship.findUnique({
+      where: { id: internshipId },
+    });
+    if (!item) throw new NotFoundException('İlan bulunamadı.');
+
+    const newStatus = item.status === 'ACTIVE' ? 'PASSIVE' : 'ACTIVE';
+    return this.prisma.internship.update({
+      where: { id: internshipId },
+      data: { status: newStatus, updatedAt: new Date() },
+    });
+  }
 }

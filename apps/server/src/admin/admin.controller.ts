@@ -62,4 +62,10 @@ export class AdminController {
   deleteInternship(@Param('id') id: string) {
     return this.adminService.deleteInternship(id);
   }
+
+  @ApiOperation({ summary: 'İlanı Onayla / Yayına Al veya Pasife Al' })
+  @Patch('internships/:id/toggle-status')
+  toggleInternshipStatus(@Param('id') id: string) {
+    return this.adminService.toggleInternshipStatus(id);
+  }
 }

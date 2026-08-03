@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './InternshipCard.css';
+import { ConfirmModal } from '../common/ConfirmModal';
 
 export type InternshipType = 'MANDATORY' | 'VOLUNTARY' | 'LONG_TERM' | 'SUMMER';
 export type EducationLevel = 'HIGH_SCHOOL' | 'ASSOCIATE' | 'BACHELOR' | 'MASTER_PHD' | 'ALL';
@@ -79,7 +80,8 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const [showDetailModal, setShowDetailModal] = React.useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const companyInitial = internship.company?.companyName
     ? internship.company.companyName.charAt(0).toUpperCase()
@@ -174,7 +176,7 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
                 <button
                   type="button"
                   className="btn-danger"
-                  onClick={() => onDelete && onDelete(internship.id)}
+                  onClick={() => setShowConfirmDelete(true)}
                 >
                   Sil
                 </button>
@@ -191,6 +193,20 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* 🛑 Şirket İlan Silme Onay Modalı */}
+      <ConfirmModal
+        isOpen={showConfirmDelete}
+        title="İlanı Silmek İstediğinize Emin Misiniz?"
+        message={`"${internship.title}" başlıklı staj ilanını kaldırmak üzeresiniz. Bu işlem geri alınamaz.`}
+        confirmText="Evet, İlanı Sil"
+        type="danger"
+        onConfirm={() => {
+          setShowConfirmDelete(false);
+          onDelete?.(internship.id);
+        }}
+        onCancel={() => setShowConfirmDelete(false)}
+      />
 
       {/* Detay Modalı */}
       {showDetailModal && (

@@ -67,6 +67,7 @@ export interface AdminInternshipItem {
   perks?: string[];
   durationWeeks?: number;
   daysPerWeek?: number;
+  status?: 'ACTIVE' | 'PASSIVE' | 'DRAFT' | 'ARCHIVED';
   createdAt: string;
   company: {
     companyName: string;
@@ -104,4 +105,8 @@ export async function fetchAdminInternships(): Promise<AdminInternshipItem[]> {
 
 export async function deleteAdminInternship(internshipId: string): Promise<void> {
   await api.delete(`/admin/internships/${internshipId}`);
+}
+
+export async function toggleAdminInternshipStatus(internshipId: string): Promise<void> {
+  await api.patch(`/admin/internships/${internshipId}/toggle-status`);
 }

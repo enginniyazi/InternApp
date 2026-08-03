@@ -108,6 +108,18 @@ let AdminService = class AdminService {
             throw new common_1.NotFoundException('İlan bulunamadı.');
         return this.prisma.internship.delete({ where: { id: internshipId } });
     }
+    async toggleInternshipStatus(internshipId) {
+        const item = await this.prisma.internship.findUnique({
+            where: { id: internshipId },
+        });
+        if (!item)
+            throw new common_1.NotFoundException('İlan bulunamadı.');
+        const newStatus = item.status === 'ACTIVE' ? 'PASSIVE' : 'ACTIVE';
+        return this.prisma.internship.update({
+            where: { id: internshipId },
+            data: { status: newStatus, updatedAt: new Date() },
+        });
+    }
 };
 exports.AdminService = AdminService;
 exports.AdminService = AdminService = __decorate([

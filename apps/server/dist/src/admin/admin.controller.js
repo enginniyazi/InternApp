@@ -46,6 +46,9 @@ let AdminController = class AdminController {
     deleteInternship(id) {
         return this.adminService.deleteInternship(id);
     }
+    toggleInternshipStatus(id) {
+        return this.adminService.toggleInternshipStatus(id);
+    }
 };
 exports.AdminController = AdminController;
 __decorate([
@@ -100,6 +103,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "deleteInternship", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'İlanı Onayla / Yayına Al veya Pasife Al' }),
+    (0, common_1.Patch)('internships/:id/toggle-status'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "toggleInternshipStatus", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Paneli (Admin)'),
     (0, swagger_1.ApiBearerAuth)(),
