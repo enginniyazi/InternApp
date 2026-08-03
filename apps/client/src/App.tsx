@@ -12,6 +12,7 @@ import { StudentApplicationsList } from './components/applications/StudentApplic
 import type { ApplicationItem } from './components/applications/StudentApplicationsList';
 import { CompanyApplicationsModal } from './components/applications/CompanyApplicationsModal';
 import type { ApplicantItem } from './components/applications/CompanyApplicationsModal';
+import { ApplicationChatModal } from './components/common/ApplicationChatModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { ToastContainer } from './components/common/ToastContainer';
 import type { ToastMessage } from './components/common/ToastContainer';
@@ -60,6 +61,21 @@ function App() {
   const [companyApplicants, setCompanyApplicants] = useState<ApplicantItem[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const [activeChatAppId, setActiveChatAppId] = useState<string | null>(null);
+
+  const handleNotificationClick = (notif: NotificationItem) => {
+    setShowNotifMenu(false);
+
+    if (notif.linkUrl) {
+      const appId = notif.linkUrl.replace('/applications/', '');
+      if (userRole === 'STUDENT') {
+        setActiveTab('applications');
+      } else if (userRole === 'COMPANY') {
+        setIsApplicantsModalOpen(true);
+      }
+      setActiveChatAppId(appId);
+    }
+  };
 
   // Profile State
   const [studentProfile, setStudentProfile] = useState<StudentProfileData>({
@@ -532,12 +548,14 @@ function App() {
                     notifications.map((notif) => (
                       <div
                         key={notif.id}
+                        onClick={() => handleNotificationClick(notif)}
                         style={{
                           padding: '8px',
                           borderRadius: '8px',
                           background: notif.isRead ? 'transparent' : 'rgba(99, 102, 241, 0.1)',
                           marginBottom: '6px',
                           fontSize: '12px',
+                          cursor: 'pointer',
                         }}
                       >
                         <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>
@@ -648,6 +666,16 @@ function App() {
         currentUserId={currentUser?.id}
         onUpdateStatus={handleUpdateApplicantStatus}
       />
+
+      {/* 💬 Bildirimden doğrudan açılan Sohbet Modalı */}
+      {activeChatAppId && currentUser && (
+        <ApplicationChatModal
+          applicationId={activeChatAppId}
+          title="💬 Bildirimden Açılan Sohbet"
+          currentUserId={currentUser.id}
+          onClose={() => setActiveChatAppId(null)}
+        />
+      )}
 
       <ToastContainer toasts={toasts} onDismiss={handleDismissToast} />
     </main>

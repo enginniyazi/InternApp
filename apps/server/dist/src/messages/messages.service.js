@@ -113,7 +113,7 @@ let MessagesService = class MessagesService {
                 title: `💬 Yeni Mesaj: ${senderName}`,
                 message: content.length > 50 ? `${content.substring(0, 50)}...` : content,
                 type: 'NEW_MESSAGE',
-                linkUrl: `/applications/${applicationId}`,
+                linkUrl: applicationId,
             },
         });
         return message;

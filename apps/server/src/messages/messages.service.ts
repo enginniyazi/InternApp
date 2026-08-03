@@ -128,7 +128,7 @@ export class MessagesService {
         message:
           content.length > 50 ? `${content.substring(0, 50)}...` : content,
         type: 'NEW_MESSAGE',
-        linkUrl: `/applications/${applicationId}`,
+        linkUrl: applicationId,
       },
     });
 
