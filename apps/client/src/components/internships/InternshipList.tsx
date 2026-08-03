@@ -36,6 +36,8 @@ export const InternshipList: React.FC<InternshipListProps> = ({
   const [selectedType, setSelectedType] = useState('ALL');
   const [selectedEdu, setSelectedEdu] = useState('ALL');
   const [isSmartMatchActive, setIsSmartMatchActive] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
 
   // ─── AKILLI EŞLEŞME FİLTRELEME & PUANLAMA ALGORİTMASI ───
   let processList = internships;
@@ -147,7 +149,14 @@ export const InternshipList: React.FC<InternshipListProps> = ({
     return matchesSearch && matchesRemote && matchesType && matchesEdu;
   });
 
+  // Sayfalama (Pagination) Hesaplamaları
+  const totalCount = filteredInternships.length;
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedInternships = filteredInternships.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   const handleSmartMatchToggle = () => {
+    setCurrentPage(1);
     if (isSmartMatchActive) {
       setIsSmartMatchActive(false);
       setSelectedEdu('ALL');
@@ -160,10 +169,29 @@ export const InternshipList: React.FC<InternshipListProps> = ({
 
   return (
     <div className="internship-list-container">
-      <div className="list-header">
-        <h2 className="list-title">
-          {isCompany ? 'Şirketime Ait İlanlar' : 'Güncel Staj İlanları'}
-        </h2>
+      <div
+        className="list-header"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <h2 className="list-title" style={{ margin: 0 }}>
+            {isCompany ? 'Şirketime Ait İlanlar' : 'Güncel Staj İlanları'}
+          </h2>
+          {/* Canlı İlan Sayısı Rozeti */}
+          <span
+            style={{
+              background: 'rgba(99, 102, 241, 0.15)',
+              color: '#818cf8',
+              border: '1px solid rgba(99, 102, 241, 0.3)',
+              borderRadius: '20px',
+              padding: '4px 12px',
+              fontSize: '13px',
+              fontWeight: 600,
+            }}
+          >
+            {totalCount} İlan Bulundu
+          </span>
+        </div>
         {isCompany && onCreateNew && (
           <button type="button" className="btn-primary" onClick={onCreateNew}>
             + Yeni İlan Ekle
@@ -178,6 +206,7 @@ export const InternshipList: React.FC<InternshipListProps> = ({
           placeholder="Pozisyon, yetenek, açıklama veya şehir ara..."
           value={searchTerm}
           onChange={(e) => {
+            setCurrentPage(1);
             setSearchTerm(e.target.value);
             onSearchChange?.(e.target.value);
           }}
@@ -186,7 +215,10 @@ export const InternshipList: React.FC<InternshipListProps> = ({
         <select
           className="filter-select"
           value={selectedType}
-          onChange={(e) => setSelectedType(e.target.value)}
+          onChange={(e) => {
+            setCurrentPage(1);
+            setSelectedType(e.target.value);
+          }}
         >
           <option value="ALL">Tüm Staj Tipleri</option>
           <option value="MANDATORY">Zorunlu Staj</option>
@@ -198,7 +230,10 @@ export const InternshipList: React.FC<InternshipListProps> = ({
         <select
           className="filter-select"
           value={selectedEdu}
-          onChange={(e) => setSelectedEdu(e.target.value)}
+          onChange={(e) => {
+            setCurrentPage(1);
+            setSelectedEdu(e.target.value);
+          }}
         >
           <option value="ALL">Tüm Eğitim Seviyeleri</option>
           <option value="BACHELOR">Lisans</option>
@@ -212,6 +247,7 @@ export const InternshipList: React.FC<InternshipListProps> = ({
             type="checkbox"
             checked={onlyRemote}
             onChange={(e) => {
+              setCurrentPage(1);
               setOnlyRemote(e.target.checked);
               onRemoteToggle?.(e.target.checked);
             }}
@@ -231,19 +267,74 @@ export const InternshipList: React.FC<InternshipListProps> = ({
         )}
       </div>
 
-      {filteredInternships.length > 0 ? (
-        <div className="internships-grid">
-          {filteredInternships.map((internship) => (
-            <InternshipCard
-              key={internship.id}
-              internship={internship}
-              isOwner={isCompany}
-              onApply={onApply}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          ))}
-        </div>
+      {paginatedInternships.length > 0 ? (
+        <>
+          <div className="internships-grid">
+            {paginatedInternships.map((internship) => (
+              <InternshipCard
+                key={internship.id}
+                internship={internship}
+                isOwner={isCompany}
+                onApply={onApply}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            ))}
+          </div>
+
+          {/* Sayfalama (Pagination) Düğmeleri */}
+          {totalPages > 1 && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '32px',
+              }}
+            >
+              <button
+                type="button"
+                className="btn-secondary"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                style={{ padding: '8px 14px', fontSize: '13px', borderRadius: '8px' }}
+              >
+                ← Önceki
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                <button
+                  key={pageNum}
+                  type="button"
+                  onClick={() => setCurrentPage(pageNum)}
+                  style={{
+                    padding: '8px 14px',
+                    fontSize: '13px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border-color)',
+                    background: currentPage === pageNum ? '#4f46e5' : 'var(--bg-card)',
+                    color: currentPage === pageNum ? '#ffffff' : 'var(--text-main)',
+                    fontWeight: currentPage === pageNum ? 700 : 500,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {pageNum}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                className="btn-secondary"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                style={{ padding: '8px 14px', fontSize: '13px', borderRadius: '8px' }}
+              >
+                Sonraki →
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="empty-state">
           <div className="empty-icon">🔍</div>
