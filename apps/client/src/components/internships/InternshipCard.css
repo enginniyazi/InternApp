@@ -65,14 +65,14 @@
   gap: 0.5rem 1rem;
   margin: 0.75rem 0;
   padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-primary);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
 }
 
 .perk-item {
   font-size: 0.8rem;
-  color: #cbd5e1;
+  color: var(--text-muted);
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -83,11 +83,12 @@
   width: 90%;
   max-height: 85vh;
   overflow-y: auto;
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 28px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
 }
 
 .detail-modal-body {
@@ -104,10 +105,10 @@
 }
 
 .detail-box {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-primary);
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -115,7 +116,7 @@
 
 .detail-label {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -123,7 +124,7 @@
 .detail-value {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #f8fafc;
+  color: var(--text-main);
 }
 
 .detail-section {
@@ -135,13 +136,13 @@
 .detail-section h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #e2e8f0;
+  color: var(--text-main);
   margin: 0;
 }
 
 .detail-section p {
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 0;
 }
