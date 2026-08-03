@@ -18,8 +18,18 @@ enum Role {
 enum ApplicationStatus {
   PENDING
   REVIEWING
+  INTERVIEW_SCHEDULED
+  OFFER_SENT
   ACCEPTED
   REJECTED
+  WITHDRAWN
+}
+
+enum InternshipStatus {
+  DRAFT
+  ACTIVE
+  PASSIVE
+  ARCHIVED
 }
 
 model User {
@@ -28,11 +38,17 @@ model User {
   passwordHash String
   role         Role            @default(STUDENT)
   refreshTokenHash String?
+  isSuspended      Boolean         @default(false)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 
   studentProfile StudentProfile?
   companyProfile CompanyProfile?
+
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
+  notifications    Notification[]
+  auditLogs        AuditLog[]
 
   @@map("users")
 }
@@ -59,7 +75,8 @@ model StudentProfile {
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 
-  applications Application[]
+  applications   Application[]
+  companyReviews CompanyReview[]
 
   @@map("student_profiles")
 }
@@ -77,6 +94,7 @@ model CompanyProfile {
   updatedAt   DateTime @updatedAt
 
   internships Internship[]
+  reviews     CompanyReview[]
 
   @@map("company_profiles")
 }
@@ -84,8 +102,8 @@ model CompanyProfile {
 enum InternshipType {
   MANDATORY
   VOLUNTARY
-  LONG_TERM
-  SUMMER
+  GRADUATE
+  PART_TIME
 }
 
 enum EducationLevel {
@@ -93,20 +111,19 @@ enum EducationLevel {
   ASSOCIATE
   BACHELOR
   MASTER_PHD
-  ALL
 }
 
 enum WorkModel {
-  REMOTE
-  HYBRID
   ON_SITE
+  HYBRID
+  REMOTE
 }
 
 enum StipendType {
   UNPAID
+  HALF_MINIMUM
   MINIMUM_WAGE
   ABOVE_MINIMUM
-  SCHOLARSHIP
 }
 
 enum ReturnOfferProbability {
@@ -125,6 +142,8 @@ model Internship {
   location             String
   isRemote             Boolean                @default(false)
   requirements         String[]
+  status               InternshipStatus       @default(ACTIVE)
+  isFeatured           Boolean                @default(false)
   
   // Gelişmiş İlan Özellikleri
   internshipType       InternshipType         @default(MANDATORY)
@@ -167,9 +186,85 @@ model Application {
   internship   Internship        @relation(fields: [internshipId], references: [id], onDelete: Cascade)
   status       ApplicationStatus @default(PENDING)
   note         String?
+  internalNote String?
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
 
+  messages   Message[]
+  interviews Interview[]
+
   @@unique([studentId, internshipId])
   @@map("applications")
+}
+
+model Message {
+  id            String      @id @default(uuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  senderId      String
+  sender        User        @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId    String
+  receiver      User        @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content       String
+  attachmentUrl String?
+  isRead        Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+
+  @@map("messages")
+}
+
+model Interview {
+  id              String      @id @default(uuid())
+  applicationId   String
+  application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  scheduledAt     DateTime
+  durationMinutes Int         @default(30)
+  location        String?
+  meetingUrl      String?
+  notes           String?
+  isCompleted     Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("interviews")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("GENERAL")
+  isRead    Boolean  @default(false)
+  linkUrl   String?
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  target    String?
+  details   String?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+model CompanyReview {
+  id               String         @id @default(uuid())
+  companyId        String
+  company          CompanyProfile @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  studentId        String
+  student          StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  rating           Int
+  comment          String
+  isApprovedByAdmin Boolean       @default(false)
+  createdAt        DateTime       @default(now())
+
+  @@map("company_reviews")
 }

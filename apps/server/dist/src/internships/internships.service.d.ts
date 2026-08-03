@@ -26,6 +26,8 @@ export declare class InternshipsService {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];
@@ -63,6 +65,8 @@ export declare class InternshipsService {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];
@@ -105,6 +109,8 @@ export declare class InternshipsService {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];
@@ -147,6 +153,8 @@ export declare class InternshipsService {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];
@@ -189,6 +197,8 @@ export declare class InternshipsService {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];

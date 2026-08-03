@@ -13,6 +13,9 @@ import { MailModule } from './mail/mail.module';
 import { AdminModule } from './admin/admin.module';
 import { HealthModule } from './health/health.module';
 
+import { MessagesModule } from './messages/messages.module';
+import { NotificationsModule } from './notifications/notifications.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +33,8 @@ import { HealthModule } from './health/health.module';
     MailModule,
     AdminModule,
     HealthModule,
+    MessagesModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

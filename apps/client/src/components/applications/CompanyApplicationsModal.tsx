@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CompanyApplicationsModal.css';
+import { ApplicationChatModal } from '../common/ApplicationChatModal';
 
 export interface ApplicantItem {
   id: string;
@@ -25,6 +26,7 @@ interface CompanyApplicationsModalProps {
   onClose: () => void;
   internshipTitle: string;
   applicants: ApplicantItem[];
+  currentUserId?: string;
   onUpdateStatus?: (applicationId: string, status: ApplicantItem['status']) => void;
 }
 
@@ -33,9 +35,11 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
   onClose,
   internshipTitle,
   applicants,
+  currentUserId = '',
   onUpdateStatus,
 }) => {
-  const [expandedAppId, setExpandedAppId] = React.useState<string | null>(null);
+  const [expandedAppId, setExpandedAppId] = useState<string | null>(null);
+  const [activeChatApp, setActiveChatApp] = useState<ApplicantItem | null>(null);
 
   if (!isOpen) return null;
 
@@ -135,6 +139,15 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
                           CV Yok
                         </span>
                       )}
+
+                      <button
+                        type="button"
+                        className="btn-primary"
+                        style={{ padding: '6px 12px', fontSize: '13px' }}
+                        onClick={() => setActiveChatApp(app)}
+                      >
+                        💬 Adayla Mesajlaş
+                      </button>
 
                       <select
                         className="status-select"
@@ -262,6 +275,16 @@ export const CompanyApplicationsModal: React.FC<CompanyApplicationsModalProps> =
           </div>
         )}
       </div>
+
+      {/* Mesajlaşma Modalı */}
+      {activeChatApp && (
+        <ApplicationChatModal
+          applicationId={activeChatApp.id}
+          title={`${internshipTitle} - ${activeChatApp.studentName}`}
+          currentUserId={currentUserId}
+          onClose={() => setActiveChatApp(null)}
+        />
+      )}
     </div>
   );
 };

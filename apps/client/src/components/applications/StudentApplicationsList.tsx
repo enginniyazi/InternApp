@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { InternshipData } from '../internships/InternshipCard';
+import { ApplicationChatModal } from '../common/ApplicationChatModal';
 import './StudentApplicationsList.css';
 
 export interface ApplicationItem {
@@ -16,10 +17,11 @@ interface StudentApplicationsListProps {
   applications: ApplicationItem[];
 }
 
-export const StudentApplicationsList: React.FC<StudentApplicationsListProps> = ({
-  applications,
-}) => {
+export const StudentApplicationsList: React.FC<
+  StudentApplicationsListProps & { currentUserId?: string }
+> = ({ applications, currentUserId = '' }) => {
   const [selectedInternship, setSelectedInternship] = useState<InternshipData | null>(null);
+  const [activeChatApp, setActiveChatApp] = useState<ApplicationItem | null>(null);
 
   const getStatusBadge = (status: ApplicationItem['status']) => {
     switch (status) {
@@ -57,6 +59,14 @@ export const StudentApplicationsList: React.FC<StudentApplicationsListProps> = (
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {getStatusBadge(app.status)}
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    style={{ padding: '6px 12px', fontSize: '13px' }}
+                    onClick={() => setActiveChatApp(app)}
+                  >
+                    💬 Şirketle Mesajlaş
+                  </button>
                   {app.internship && (
                     <button
                       type="button"
@@ -168,6 +178,16 @@ export const StudentApplicationsList: React.FC<StudentApplicationsListProps> = (
             </div>
           </div>
         </div>
+      )}
+
+      {/* Mesajlaşma Modalı */}
+      {activeChatApp && (
+        <ApplicationChatModal
+          applicationId={activeChatApp.id}
+          title={`${activeChatApp.internshipTitle} - ${activeChatApp.companyName}`}
+          currentUserId={currentUserId}
+          onClose={() => setActiveChatApp(null)}
+        />
       )}
     </>
   );

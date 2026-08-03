@@ -121,7 +121,7 @@ export class PrismaService
               'Ölçeklenebilir RESTful API servisleri geliştirecek, PostgreSQL ve Prisma ORM mimarilerini yerinde deneyimleyecek stajyer takım arkadaşı arıyoruz.',
             location: 'Ankara / ODTÜ Teknokent',
             isRemote: false,
-            internshipType: 'LONG_TERM' as const,
+            internshipType: 'MANDATORY' as const,
             targetEducationLevel: 'BACHELOR' as const,
             targetDepartments: [
               'Bilgisayar Mühendisliği',
@@ -145,7 +145,7 @@ export class PrismaService
               'Büyük Dil Modelleri (LLM), RAG mimarileri ve Derin Öğrenme alanında akademik/endüstriyel projelerde çalışacak yüksek lisans veya lisans stajyeri.',
             location: 'İzmir / Urla Teknopark',
             isRemote: true,
-            internshipType: 'SUMMER' as const,
+            internshipType: 'VOLUNTARY' as const,
             targetEducationLevel: 'MASTER_PHD' as const,
             targetDepartments: [
               'Yapay Zeka Mühendisliği',
@@ -205,7 +205,7 @@ export class PrismaService
             durationWeeks: 12,
             workModel: 'REMOTE' as const,
             city: 'Ankara',
-            stipendType: 'SCHOLARSHIP' as const,
+            stipendType: 'MINIMUM_WAGE' as const,
             hasMealAllowance: true,
             hasTransportation: false,
             hasEquipment: false,
@@ -245,7 +245,7 @@ export class PrismaService
               'Docker, Kubernetes ve CI/CD süreçlerini otomatize edecek, AWS/GCP bulut mimarilerini öğrenecek stajyer mühendis.',
             location: 'Kocaeli / Bilişim Vadisi',
             isRemote: true,
-            internshipType: 'LONG_TERM' as const,
+            internshipType: 'MANDATORY' as const,
             targetEducationLevel: 'BACHELOR' as const,
             targetDepartments: [
               'Bilgisayar Mühendisliği',
@@ -352,7 +352,7 @@ export class PrismaService
             ...t,
             title: `${t.title} (${idx % 2 === 0 ? 'Güz Dönemi' : 'Bahar Dönemi'})`,
             internshipType: (idx % 2 === 0
-              ? 'LONG_TERM'
+              ? 'MANDATORY'
               : 'VOLUNTARY') as InternshipType,
             targetEducationLevel: (idx % 3 === 0
               ? 'ASSOCIATE'

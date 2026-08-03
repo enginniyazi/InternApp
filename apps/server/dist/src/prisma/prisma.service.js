@@ -132,7 +132,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         description: 'Ölçeklenebilir RESTful API servisleri geliştirecek, PostgreSQL ve Prisma ORM mimarilerini yerinde deneyimleyecek stajyer takım arkadaşı arıyoruz.',
                         location: 'Ankara / ODTÜ Teknokent',
                         isRemote: false,
-                        internshipType: 'LONG_TERM',
+                        internshipType: 'MANDATORY',
                         targetEducationLevel: 'BACHELOR',
                         targetDepartments: [
                             'Bilgisayar Mühendisliği',
@@ -155,7 +155,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         description: 'Büyük Dil Modelleri (LLM), RAG mimarileri ve Derin Öğrenme alanında akademik/endüstriyel projelerde çalışacak yüksek lisans veya lisans stajyeri.',
                         location: 'İzmir / Urla Teknopark',
                         isRemote: true,
-                        internshipType: 'SUMMER',
+                        internshipType: 'VOLUNTARY',
                         targetEducationLevel: 'MASTER_PHD',
                         targetDepartments: [
                             'Yapay Zeka Mühendisliği',
@@ -213,7 +213,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         durationWeeks: 12,
                         workModel: 'REMOTE',
                         city: 'Ankara',
-                        stipendType: 'SCHOLARSHIP',
+                        stipendType: 'MINIMUM_WAGE',
                         hasMealAllowance: true,
                         hasTransportation: false,
                         hasEquipment: false,
@@ -251,7 +251,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         description: 'Docker, Kubernetes ve CI/CD süreçlerini otomatize edecek, AWS/GCP bulut mimarilerini öğrenecek stajyer mühendis.',
                         location: 'Kocaeli / Bilişim Vadisi',
                         isRemote: true,
-                        internshipType: 'LONG_TERM',
+                        internshipType: 'MANDATORY',
                         targetEducationLevel: 'BACHELOR',
                         targetDepartments: [
                             'Bilgisayar Mühendisliği',
@@ -351,7 +351,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         ...t,
                         title: `${t.title} (${idx % 2 === 0 ? 'Güz Dönemi' : 'Bahar Dönemi'})`,
                         internshipType: (idx % 2 === 0
-                            ? 'LONG_TERM'
+                            ? 'MANDATORY'
                             : 'VOLUNTARY'),
                         targetEducationLevel: (idx % 3 === 0
                             ? 'ASSOCIATE'

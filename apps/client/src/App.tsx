@@ -33,6 +33,8 @@ import {
   updateApplicationStatus,
 } from './lib/applicationService';
 import { fetchStudentProfile, updateStudentProfile, uploadCv } from './lib/profileService';
+import { fetchNotifications, markAllNotificationsAsRead } from './lib/notificationService';
+import type { NotificationItem } from './lib/notificationService';
 
 type UserRoleType = 'GUEST' | 'STUDENT' | 'COMPANY' | 'ADMIN';
 type TabType = 'internships' | 'profile' | 'applications' | 'admin';
@@ -56,6 +58,8 @@ function App() {
   const [internships, setInternships] = useState<InternshipData[]>([]);
   const [studentApplications, setStudentApplications] = useState<ApplicationItem[]>([]);
   const [companyApplicants, setCompanyApplicants] = useState<ApplicantItem[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [showNotifMenu, setShowNotifMenu] = useState(false);
 
   // Profile State
   const [studentProfile, setStudentProfile] = useState<StudentProfileData>({
@@ -169,12 +173,23 @@ function App() {
     }
   }, [userRole, handleApiError]);
 
-  // ─── Profil çek ───
+  // ─── Profil ve Bildirim çek ───
   useEffect(() => {
     if (userRole === 'STUDENT') {
       fetchStudentProfile()
         .then(setStudentProfile)
         .catch(() => {});
+    }
+
+    if (userRole !== 'GUEST') {
+      const loadNotifs = () => {
+        fetchNotifications()
+          .then(setNotifications)
+          .catch(() => {});
+      };
+      loadNotifs();
+      const interval = setInterval(loadNotifs, 5000);
+      return () => clearInterval(interval);
     }
   }, [userRole]);
 
@@ -429,6 +444,122 @@ function App() {
             </div>
           )}
 
+          {userRole !== 'GUEST' && (
+            <div style={{ position: 'relative' }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => {
+                  setShowNotifMenu(!showNotifMenu);
+                  if (notifications.some((n) => !n.isRead)) {
+                    markAllNotificationsAsRead().then(() =>
+                      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })))
+                    );
+                  }
+                }}
+                style={{
+                  padding: '6px 10px',
+                  fontSize: '13px',
+                  borderRadius: '8px',
+                  position: 'relative',
+                }}
+              >
+                🔔 Bildirimler
+                {notifications.some((n) => !n.isRead) && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '-4px',
+                      right: '-4px',
+                      background: '#ef4444',
+                      color: '#ffffff',
+                      fontSize: '10px',
+                      fontWeight: 700,
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {notifications.filter((n) => !n.isRead).length}
+                  </span>
+                )}
+              </button>
+
+              {showNotifMenu && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '40px',
+                    right: 0,
+                    width: '320px',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+                    zIndex: 100,
+                    padding: '12px',
+                    maxHeight: '350px',
+                    overflowY: 'auto',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      marginBottom: '8px',
+                      borderBottom: '1px solid var(--border-color)',
+                      paddingBottom: '6px',
+                      color: 'var(--text-main)',
+                    }}
+                  >
+                    🔔 Son Bildirimleriniz
+                  </div>
+                  {notifications.length === 0 ? (
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        color: 'var(--text-muted)',
+                        textAlign: 'center',
+                        padding: '16px 0',
+                      }}
+                    >
+                      Henüz bildiriminiz yok.
+                    </div>
+                  ) : (
+                    notifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        style={{
+                          padding: '8px',
+                          borderRadius: '8px',
+                          background: notif.isRead ? 'transparent' : 'rgba(99, 102, 241, 0.1)',
+                          marginBottom: '6px',
+                          fontSize: '12px',
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>
+                          {notif.title}
+                        </div>
+                        <div style={{ color: 'var(--text-muted)', marginTop: '2px' }}>
+                          {notif.message}
+                        </div>
+                        <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
+                          {new Date(notif.createdAt).toLocaleTimeString('tr-TR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           <button
             type="button"
             aria-label="Tema değiştir"
@@ -481,7 +612,10 @@ function App() {
             onUploadCv={handleUploadCv}
           />
         ) : activeTab === 'applications' && userRole === 'STUDENT' ? (
-          <StudentApplicationsList applications={studentApplications} />
+          <StudentApplicationsList
+            applications={studentApplications}
+            currentUserId={currentUser?.id}
+          />
         ) : activeTab === 'admin' && userRole === 'ADMIN' ? (
           <AdminDashboard />
         ) : (
@@ -509,8 +643,9 @@ function App() {
       <CompanyApplicationsModal
         isOpen={isApplicantsModalOpen}
         onClose={() => setIsApplicantsModalOpen(false)}
-        internshipTitle="Frontend Developer Stajyeri"
+        internshipTitle="Gelen Tüm Staj Başvuruları"
         applicants={companyApplicants}
+        currentUserId={currentUser?.id}
         onUpdateStatus={handleUpdateApplicantStatus}
       />
 

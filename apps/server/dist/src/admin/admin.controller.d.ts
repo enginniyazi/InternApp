@@ -81,6 +81,7 @@ export declare class AdminController {
         passwordHash: string;
         role: import(".prisma/client").$Enums.Role;
         refreshTokenHash: string | null;
+        isSuspended: boolean;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -101,6 +102,8 @@ export declare class AdminController {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];
@@ -131,6 +134,8 @@ export declare class AdminController {
         location: string;
         isRemote: boolean;
         requirements: string[];
+        status: import(".prisma/client").$Enums.InternshipStatus;
+        isFeatured: boolean;
         internshipType: import(".prisma/client").$Enums.InternshipType;
         targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
         targetDepartments: string[];

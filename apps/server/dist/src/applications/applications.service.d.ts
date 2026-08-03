@@ -27,6 +27,8 @@ export declare class ApplicationsService {
             location: string;
             isRemote: boolean;
             requirements: string[];
+            status: import(".prisma/client").$Enums.InternshipStatus;
+            isFeatured: boolean;
             internshipType: import(".prisma/client").$Enums.InternshipType;
             targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
             targetDepartments: string[];
@@ -55,6 +57,7 @@ export declare class ApplicationsService {
         internshipId: string;
         status: import(".prisma/client").$Enums.ApplicationStatus;
         note: string | null;
+        internalNote: string | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -79,6 +82,8 @@ export declare class ApplicationsService {
             location: string;
             isRemote: boolean;
             requirements: string[];
+            status: import(".prisma/client").$Enums.InternshipStatus;
+            isFeatured: boolean;
             internshipType: import(".prisma/client").$Enums.InternshipType;
             targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
             targetDepartments: string[];
@@ -107,6 +112,7 @@ export declare class ApplicationsService {
         internshipId: string;
         status: import(".prisma/client").$Enums.ApplicationStatus;
         note: string | null;
+        internalNote: string | null;
         createdAt: Date;
         updatedAt: Date;
     })[]>;
@@ -119,6 +125,8 @@ export declare class ApplicationsService {
             location: string;
             isRemote: boolean;
             requirements: string[];
+            status: import(".prisma/client").$Enums.InternshipStatus;
+            isFeatured: boolean;
             internshipType: import(".prisma/client").$Enums.InternshipType;
             targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
             targetDepartments: string[];
@@ -172,6 +180,7 @@ export declare class ApplicationsService {
         internshipId: string;
         status: import(".prisma/client").$Enums.ApplicationStatus;
         note: string | null;
+        internalNote: string | null;
         createdAt: Date;
         updatedAt: Date;
     })[]>;
@@ -184,6 +193,8 @@ export declare class ApplicationsService {
             location: string;
             isRemote: boolean;
             requirements: string[];
+            status: import(".prisma/client").$Enums.InternshipStatus;
+            isFeatured: boolean;
             internshipType: import(".prisma/client").$Enums.InternshipType;
             targetEducationLevel: import(".prisma/client").$Enums.EducationLevel;
             targetDepartments: string[];
@@ -213,6 +224,7 @@ export declare class ApplicationsService {
                 passwordHash: string;
                 role: import(".prisma/client").$Enums.Role;
                 refreshTokenHash: string | null;
+                isSuspended: boolean;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -243,6 +255,7 @@ export declare class ApplicationsService {
         internshipId: string;
         status: import(".prisma/client").$Enums.ApplicationStatus;
         note: string | null;
+        internalNote: string | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
