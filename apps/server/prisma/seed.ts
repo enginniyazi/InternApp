@@ -30,6 +30,7 @@ async function main() {
           companyName: 'TechVision A.Ş.',
           website: 'https://techvision.com',
           description: 'Yenilikçi yapay zekâ ve web yazılım çözümleri.',
+          isApproved: true,
         },
       },
     },
@@ -50,6 +51,7 @@ async function main() {
           website: 'https://datacorp.com',
           description:
             'Büyük veri ve bulut teknolojileri üzerine uzman şirket.',
+          isApproved: true,
         },
       },
     },

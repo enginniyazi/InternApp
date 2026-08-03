@@ -25,6 +25,7 @@ export interface UserData {
     website?: string;
     description?: string;
     logoUrl?: string;
+    isApproved?: boolean;
   } | null;
 }
 

@@ -33,6 +33,12 @@ export class InternshipsService {
   async create(userId: string, dto: CreateInternshipDto) {
     const companyProfile = await this.getOrCreateCompanyProfile(userId);
 
+    if (!companyProfile.isApproved) {
+      throw new ForbiddenException(
+        'Hesabınız henüz Admin tarafından onaylanmamıştır. İlan oluşturabilmek için şirket profilinizin onaylanması gerekmektedir.',
+      );
+    }
+
     return this.prisma.internship.create({
       data: {
         companyId: companyProfile.id,
@@ -83,9 +89,12 @@ export class InternshipsService {
       workModel,
     } = filterDto;
 
-    // Öğrenciler ve genel kullanıcılar yalnızca ADMIN tarafından onaylanmış (ACTIVE) ilanları görebilir
+    // Öğrenciler yalnızca ADMIN tarafından onaylanmış (ACTIVE) VE şirketi onaylı (isApproved: true) ilanları görebilir
     const where: Prisma.InternshipWhereInput = {
       status: 'ACTIVE',
+      company: {
+        isApproved: true,
+      },
     };
 
     if (search) {

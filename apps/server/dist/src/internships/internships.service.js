@@ -33,6 +33,9 @@ let InternshipsService = class InternshipsService {
     }
     async create(userId, dto) {
         const companyProfile = await this.getOrCreateCompanyProfile(userId);
+        if (!companyProfile.isApproved) {
+            throw new common_1.ForbiddenException('Hesabınız henüz Admin tarafından onaylanmamıştır. İlan oluşturabilmek için şirket profilinizin onaylanması gerekmektedir.');
+        }
         return this.prisma.internship.create({
             data: {
                 companyId: companyProfile.id,
@@ -75,6 +78,9 @@ let InternshipsService = class InternshipsService {
         const { search, location, city, isRemote, internshipType, targetEducationLevel, workModel, } = filterDto;
         const where = {
             status: 'ACTIVE',
+            company: {
+                isApproved: true,
+            },
         };
         if (search) {
             where.OR = [

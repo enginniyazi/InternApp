@@ -265,6 +265,13 @@ function App() {
   };
 
   const handleCreateNew = () => {
+    if (currentUser?.companyProfile && !currentUser.companyProfile.isApproved) {
+      addToast(
+        'error',
+        'Hesabınız henüz Admin tarafından onaylanmamıştır. İlan oluşturabilmek için şirketinizin onaylanması gerekmektedir.'
+      );
+      return;
+    }
     setEditingInternship(null);
     setIsFormModalOpen(true);
   };
