@@ -653,7 +653,9 @@ function App() {
             onDelete={handleDelete}
             onCreateNew={handleCreateNew}
             onSearchChange={(search) => loadInternships({ search })}
-            onRemoteToggle={(isRemote) => loadInternships({ isRemote })}
+            onRemoteToggle={(isRemote) =>
+              loadInternships({ isRemote: isRemote ? true : undefined })
+            }
           />
         )}
       </section>

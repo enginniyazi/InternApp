@@ -95,8 +95,8 @@ let InternshipsService = class InternshipsService {
         if (city) {
             where.city = { equals: city, mode: 'insensitive' };
         }
-        if (typeof isRemote === 'boolean') {
-            where.isRemote = isRemote;
+        if (isRemote === true) {
+            where.isRemote = true;
         }
         if (internshipType) {
             where.internshipType = internshipType;

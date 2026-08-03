@@ -113,8 +113,9 @@ export class InternshipsService {
       where.city = { equals: city, mode: 'insensitive' };
     }
 
-    if (typeof isRemote === 'boolean') {
-      where.isRemote = isRemote;
+    // Remote butonu seçildiğinde (isRemote: true) sadece uzaktan çalışma ilanları süzülür. Seçili değilse TÜM ilanlar gelir.
+    if (isRemote === true) {
+      where.isRemote = true;
     }
 
     if (internshipType) {
