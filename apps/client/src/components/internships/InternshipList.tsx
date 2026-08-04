@@ -265,6 +265,40 @@ export const InternshipList: React.FC<InternshipListProps> = ({
             {isSmartMatchActive ? '✨ Tüm İlanları Göster' : '✨ Bana Uygun İlanlar'}
           </button>
         )}
+
+        {/* 🔄 Filtreleri Temizle Butonu (Filtrelerden biri değiştirildiğinde belirir) */}
+        {(searchTerm ||
+          selectedType !== 'ALL' ||
+          selectedEdu !== 'ALL' ||
+          onlyRemote ||
+          isSmartMatchActive) && (
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedType('ALL');
+              setSelectedEdu('ALL');
+              setOnlyRemote(false);
+              setIsSmartMatchActive(false);
+              setCurrentPage(1);
+              onSearchChange?.('');
+              onRemoteToggle?.(false);
+            }}
+            style={{
+              padding: '6px 12px',
+              fontSize: '13px',
+              borderRadius: '8px',
+              background: 'rgba(239, 68, 68, 0.1)',
+              color: '#ef4444',
+              borderColor: 'rgba(239, 68, 68, 0.3)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            🔄 Filtreleri Temizle
+          </button>
+        )}
       </div>
 
       {paginatedInternships.length > 0 ? (
