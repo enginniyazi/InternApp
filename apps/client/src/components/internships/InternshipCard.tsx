@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './InternshipCard.css';
 import { ConfirmModal } from '../common/ConfirmModal';
 
-export type InternshipType = 'MANDATORY' | 'VOLUNTARY' | 'LONG_TERM' | 'SUMMER';
+export type InternshipType = 'MANDATORY' | 'VOLUNTARY' | 'GRADUATE' | 'PART_TIME';
 export type EducationLevel = 'HIGH_SCHOOL' | 'ASSOCIATE' | 'BACHELOR' | 'MASTER_PHD' | 'ALL';
 export type WorkModel = 'REMOTE' | 'HYBRID' | 'ON_SITE';
-export type StipendType = 'UNPAID' | 'MINIMUM_WAGE' | 'ABOVE_MINIMUM' | 'SCHOLARSHIP';
+export type StipendType = 'UNPAID' | 'MINIMUM_WAGE' | 'ABOVE_MINIMUM';
 export type ReturnOfferProbability = 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE';
 
 export interface InternshipData {
@@ -54,8 +54,8 @@ interface InternshipCardProps {
 const TYPE_LABELS: Record<InternshipType, string> = {
   MANDATORY: 'Zorunlu Staj',
   VOLUNTARY: 'Gönüllü Staj',
-  LONG_TERM: 'Uzun Dönem',
-  SUMMER: 'Yaz Stajı',
+  GRADUATE: 'Mezuniyet Stajı',
+  PART_TIME: 'Yarı Zamanlı (Part-Time)',
 };
 
 const EDU_LABELS: Record<EducationLevel, string> = {
@@ -70,7 +70,6 @@ const STIPEND_LABELS: Record<StipendType, string> = {
   UNPAID: 'Ücretsiz / Deneyim',
   MINIMUM_WAGE: 'Asgari Ücret',
   ABOVE_MINIMUM: 'Asgari Ücret Üstü',
-  SCHOLARSHIP: 'Burs Destekli',
 };
 
 export const InternshipCard: React.FC<InternshipCardProps> = ({

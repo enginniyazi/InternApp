@@ -223,8 +223,8 @@ export const InternshipList: React.FC<InternshipListProps> = ({
           <option value="ALL">Tüm Staj Tipleri</option>
           <option value="MANDATORY">Zorunlu Staj</option>
           <option value="VOLUNTARY">Gönüllü Staj</option>
-          <option value="LONG_TERM">Uzun Dönem</option>
-          <option value="SUMMER">Yaz Stajı</option>
+          <option value="GRADUATE">Mezuniyet Stajı</option>
+          <option value="PART_TIME">Yarı Zamanlı (Part-Time)</option>
         </select>
 
         <select

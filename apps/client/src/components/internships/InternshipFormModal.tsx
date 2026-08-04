@@ -17,14 +17,14 @@ const internshipSchema = z.object({
   isRemote: z.boolean(),
   requirements: z.array(z.string()),
 
-  internshipType: z.enum(['MANDATORY', 'VOLUNTARY', 'LONG_TERM', 'SUMMER']),
+  internshipType: z.enum(['MANDATORY', 'VOLUNTARY', 'GRADUATE', 'PART_TIME']),
   targetEducationLevel: z.enum(['HIGH_SCHOOL', 'ASSOCIATE', 'BACHELOR', 'MASTER_PHD', 'ALL']),
   targetDepartments: z.array(z.string()),
   weeklyDays: z.number().min(1).max(7),
   durationWeeks: z.number().min(1),
   workModel: z.enum(['REMOTE', 'HYBRID', 'ON_SITE']),
   city: z.string().min(2),
-  stipendType: z.enum(['UNPAID', 'MINIMUM_WAGE', 'ABOVE_MINIMUM', 'SCHOLARSHIP']),
+  stipendType: z.enum(['UNPAID', 'MINIMUM_WAGE', 'ABOVE_MINIMUM']),
   hasMealAllowance: z.boolean(),
   hasTransportation: z.boolean(),
   hasEquipment: z.boolean(),
@@ -88,16 +88,17 @@ export const InternshipFormModal: React.FC<InternshipFormModalProps> = ({
       setCity(initialData.city || 'İstanbul');
       setRequirementsInput(initialData.requirements ? initialData.requirements.join(', ') : '');
 
-      setInternshipType(initialData.internshipType || 'MANDATORY');
-      setTargetEducationLevel(initialData.targetEducationLevel || 'BACHELOR');
-      setTargetDepartmentsInput(
-        initialData.targetDepartments ? initialData.targetDepartments.join(', ') : ''
-      );
-      setWeeklyDays(initialData.weeklyDays || 5);
-      setDurationWeeks(initialData.durationWeeks || 12);
-      setWorkModel(initialData.workModel || 'HYBRID');
+      let mappedType = initialData.internshipType as string;
+      if (mappedType === 'LONG_TERM' || mappedType === 'SUMMER' || !mappedType) {
+        mappedType = 'MANDATORY';
+      }
+      setInternshipType(mappedType as InternshipType);
 
-      setStipendType(initialData.stipendType || 'MINIMUM_WAGE');
+      let mappedStipend = initialData.stipendType as string;
+      if (mappedStipend === 'SCHOLARSHIP' || !mappedStipend) {
+        mappedStipend = 'MINIMUM_WAGE';
+      }
+      setStipendType(mappedStipend as StipendType);
       setHasMealAllowance(initialData.hasMealAllowance ?? true);
       setHasTransportation(initialData.hasTransportation ?? true);
       setHasEquipment(initialData.hasEquipment ?? true);
@@ -339,8 +340,8 @@ export const InternshipFormModal: React.FC<InternshipFormModalProps> = ({
                   >
                     <option value="MANDATORY">Zorunlu Okul Stajı</option>
                     <option value="VOLUNTARY">Gönüllü Staj</option>
-                    <option value="LONG_TERM">Uzun Dönem Staj</option>
-                    <option value="SUMMER">Yaz Stajı</option>
+                    <option value="GRADUATE">Mezuniyet Stajı</option>
+                    <option value="PART_TIME">Yarı Zamanlı (Part-Time)</option>
                   </select>
                 </div>
 
